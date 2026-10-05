@@ -2,6 +2,7 @@
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Animator))]
 public class TopDownPlayerController : MonoBehaviour
 {
     [Header("Movement")]
@@ -15,11 +16,14 @@ public class TopDownPlayerController : MonoBehaviour
     public Camera mainCamera;
 
     private CharacterController controller;
+    private Animator animator;
+
     private float verticalVelocity;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
 
         if (mainCamera == null)
             mainCamera = Camera.main;
@@ -29,8 +33,12 @@ public class TopDownPlayerController : MonoBehaviour
     {
         Move();
         RotateToMouse();
+        HandleAttack();
     }
 
+    // =========================================
+    // DI CHUYỂN + ANIMATION
+    // =========================================
     void Move()
     {
         if (mainCamera == null)
@@ -56,31 +64,35 @@ public class TopDownPlayerController : MonoBehaviour
 
         input = input.normalized;
 
-        // =========================
+        // =====================================
+        // ANIMATION IDLE / WALK
+        // =====================================
+
+        animator.SetFloat("Speed", input.magnitude);
+
+        // =====================================
         // DI CHUYỂN THEO CAMERA
-        // =========================
+        // =====================================
 
         Vector3 cameraForward = mainCamera.transform.forward;
         Vector3 cameraRight = mainCamera.transform.right;
 
-        // Không cho hướng camera ảnh hưởng độ cao
         cameraForward.y = 0f;
         cameraRight.y = 0f;
 
         cameraForward.Normalize();
         cameraRight.Normalize();
 
-        // W/S = tiến/lùi theo màn hình
-        // A/D = trái/phải theo màn hình
         Vector3 move =
             cameraForward * input.y +
             cameraRight * input.x;
 
-        move.Normalize();
+        if (move.sqrMagnitude > 1f)
+            move.Normalize();
 
-        // =========================
+        // =====================================
         // GRAVITY
-        // =========================
+        // =====================================
 
         if (controller.isGrounded && verticalVelocity < 0f)
         {
@@ -95,6 +107,9 @@ public class TopDownPlayerController : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
     }
 
+    // =========================================
+    // XOAY NHÂN VẬT VỀ CHUỘT
+    // =========================================
     void RotateToMouse()
     {
         if (mainCamera == null || Mouse.current == null)
@@ -106,7 +121,6 @@ public class TopDownPlayerController : MonoBehaviour
         Ray ray =
             mainCamera.ScreenPointToRay(mousePosition);
 
-        // Mặt phẳng ngang tại vị trí nhân vật
         Plane groundPlane =
             new Plane(Vector3.up, transform.position);
 
@@ -132,6 +146,20 @@ public class TopDownPlayerController : MonoBehaviour
                         rotationSpeed * Time.deltaTime
                     );
             }
+        }
+    }
+
+    // =========================================
+    // ATTACK - CHUỘT TRÁI
+    // =========================================
+    void HandleAttack()
+    {
+        if (Mouse.current == null)
+            return;
+
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            animator.SetTrigger("Attack");
         }
     }
 }
