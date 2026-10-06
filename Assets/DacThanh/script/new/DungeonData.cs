@@ -13,18 +13,24 @@ public class DungeonData : ScriptableObject
     public DungeonWorld dungeonWorld = DungeonWorld.jungle;
 
     [Header("Prefabs")]
-    public GameObject Floor;      // pivot ở giữa, kích thước 1 ô
+    public List<FloorPrefab> Floors;      // pivot ở giữa, kích thước 1 ô
     public GameObject wall;       // pivot ở giữa, kích thước 1 ô
     public GameObject Corridor;   // pivot ở giữa, kích thước 1 ô
     public GameObject Gate;       // pivot Ở ĐÁY, cao 2 ô
 
     [Header("Decoration")]
-    public List<Decor> Decor;
+    public List<DecorPrefab> Decor;
 }
 
 [System.Serializable]
-public class Decor
+public class DecorPrefab
 {
-    public GameObject decor;
+    public GameObject prefab;
     public int Rate;
+}
+[System.Serializable]
+public class FloorPrefab
+{
+    public GameObject prefab;
+    public int Rate = 1;
 }
