@@ -24,7 +24,7 @@ public class Dungeon
     public dungeonType Type;
     public Vector2Int dungeonSize;
     public DungeonRoom startRoom, endRoom;
-
+    public Dictionary<int, DungeonRoom> roomById = new Dictionary<int, DungeonRoom>();
     // List
     // Key = (x, z) trong thế giới 3D
     public Dictionary<Vector2Int, DungeonTile> dungeonTiles = new Dictionary<Vector2Int, DungeonTile>();
@@ -95,6 +95,12 @@ public class Dungeon
         for (int i = 0; i < rooms.Count; i++)
         {
             rooms[i].idRoom = ids[i];
+        }
+        roomById.Clear();
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            rooms[i].idRoom = ids[i];
+            roomById[ids[i]] = rooms[i];
         }
     }
 
@@ -175,4 +181,17 @@ public class Dungeon
             }
         }
     }
+
+    #region Tra cứu
+
+    public bool TryGetRoom(int id, out DungeonRoom room)
+    {
+        return roomById.TryGetValue(id, out room);
+    }
+
+    public bool TryGetTile(Vector2Int pos, out DungeonTile tile)
+    {
+        return dungeonTiles.TryGetValue(pos, out tile);
+    }
+    #endregion
 }

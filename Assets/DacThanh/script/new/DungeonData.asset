@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: DungeonData
   m_EditorClassIdentifier: Assembly-CSharp::DungeonData
   dungeonWorld: 0
-  Floor: {fileID: 9186243745350663760, guid: fe85e38c374089c4786f1340a7a30f99, type: 3}
+  Floors:
+  - prefab: {fileID: 9186243745350663760, guid: fe85e38c374089c4786f1340a7a30f99, type: 3}
+    Rate: 1
+  - prefab: {fileID: 9186243745350663760, guid: fda58f322e0926f449b69dd8d528fdfc, type: 3}
+    Rate: 3
   wall: {fileID: 9186243745350663760, guid: d708d88dfd8ec554092c2f7c60fe44ea, type: 3}
   Corridor: {fileID: 9186243745350663760, guid: b7b8169cb81b38848acb8fcfec45138a, type: 3}
   Gate: {fileID: 9186243745350663760, guid: fda58f322e0926f449b69dd8d528fdfc, type: 3}

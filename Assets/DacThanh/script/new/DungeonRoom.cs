@@ -13,10 +13,29 @@ public enum RoomType
 [System.Serializable]
 public class DungeonRoom
 {
+    [Header( " thông tin Room")]
+    
     public int idRoom;
 
-    public Vector2Int spawnPosition;
-
+    private Vector2Int spawnPosition;
+    public Vector2Int Min => spawnPosition;  
+    public Vector2Int Max => new Vector2Int(spawnPosition.x + size.x - 1,
+        spawnPosition.y + size.y - 1);
+    public int Width => size.x;
+    public int Height => size.y;
+    [Header( " thông tin tọa độ sàn")]
+    public Vector2Int InnerMin => Min + Vector2Int.one;
+    public Vector2Int InnerMax => Max - Vector2Int.one;
+    public Vector2Int InnerSize => size - new Vector2Int(2, 2);
+    public bool Contains(Vector2Int pos)
+    {
+        return pos.x >= Min.x && pos.x <= Max.x &&
+               pos.y >= Min.y && pos.y <= Max.y;
+    }
+    public Vector2Int LocalToTile(int localX, int localY)
+    {
+        return new Vector2Int(Min.x + localX, Min.y + localY);
+    }
     public RoomType roomType;
 
     public Vector2Int size;
@@ -25,8 +44,7 @@ public class DungeonRoom
     public int roomPadding = 2;
 
     // Key = vị trí Tile, Value = DungeonTile
-    public Dictionary<Vector2Int, DungeonTile> roomTiles =
-        new Dictionary<Vector2Int, DungeonTile>();
+    public Dictionary<Vector2Int, DungeonTile> roomTiles = new Dictionary<Vector2Int, DungeonTile>();
 
     [System.NonSerialized] public List<DungeonRoom> connections = new List<DungeonRoom>();
     public List<Vector2Int> gates = new List<Vector2Int>();

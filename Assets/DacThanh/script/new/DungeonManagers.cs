@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class DungeonManagers : MonoBehaviour
 {
+    public static DungeonManagers instance;
     [Header("Seed")]
     public int MasterSeed;
     public bool randomSeed = true;
@@ -19,6 +22,12 @@ public class DungeonManagers : MonoBehaviour
     private Dungeon dungeon;
     public List<DungeonRoom> dungeonRooms;
     private Transform dungeonRoot;
+    private System.Random renderRandom;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Start()
     {
@@ -60,7 +69,7 @@ public class DungeonManagers : MonoBehaviour
         ClearTile();
         dungeon = new Dungeon(seed, Level, data);
         dungeonRooms = dungeon.rooms;
-
+        renderRandom = new System.Random(dungeon.Seed);
         RenderDungeon();
     }
 
@@ -94,7 +103,7 @@ public class DungeonManagers : MonoBehaviour
             switch (tile.Type)
             {
                 case DungeonTileType.Floor:
-                    SpawnFloor(data.Floor, basePos);
+                    SpawnFloor(GetPrefab(data.Floors,w => w.prefab, w => w.Rate), basePos);
                     break;
 
                 case DungeonTileType.Corridor:
@@ -107,7 +116,7 @@ public class DungeonManagers : MonoBehaviour
 
                 case DungeonTileType.Gate:
                     SpawnFloor(data.Corridor, basePos);                 // nền dưới gate
-                    SpawnGate(data.Gate, tile.Position, basePos);
+                    SpawnGate(data.Gate, tile.Position, basePos+ new Vector3(0,0.5f,0));
                     SpawnWallColumn(data.wall, basePos, GateHeight);    // tường phía trên gate
                     break;
 
@@ -165,5 +174,50 @@ public class DungeonManagers : MonoBehaviour
         else DestroyImmediate(dungeonRoot.gameObject);
 
         dungeonRoot = null;
+    }
+    private GameObject GetPrefab<T>(List<T> list,
+        System.Func<T, GameObject> getPrefab,
+        System.Func<T, int> getRate)
+    {
+        if (list == null || list.Count == 0) return null;
+
+        int total = 0;
+        foreach (T item in list)
+            if (getPrefab(item) != null && getRate(item) > 0)
+                total += getRate(item);
+
+        if (total <= 0) return null;
+
+        int roll = renderRandom.Next(total);
+        foreach (T item in list)
+        {
+            int rate = getRate(item);
+            if (getPrefab(item) == null || rate <= 0) continue;
+            if (roll < rate) return getPrefab(item);
+            roll -= rate;
+        }
+        return null;
+    }
+    public DungeonRoom GetRoomById(int id)
+    {
+        if (!dungeon.TryGetRoom(id, out DungeonRoom room)) return null;
+        return room; 
+    }
+    public Vector3? GetPosOfRoomId(int roomId, int localX, int localY)
+    {
+        if (GetRoomById(roomId) == null)
+        {
+            Debug.LogWarning($"Không có room id {roomId}");
+            return null;
+        }
+        Vector2Int pos = GetRoomById(roomId).LocalToTile(localX, localY);
+        if (!dungeon.TryGetTile(pos, out DungeonTile tile) ||
+            tile.Type != DungeonTileType.Floor)
+        {
+            Debug.LogWarning($"Tile {pos} không phải Floor / không có tile nhập vào");
+            return null;
+        }
+        Vector3 world = new Vector3(pos.x * tileSize, 0f, pos.y * tileSize);
+        return world;
     }
 }
