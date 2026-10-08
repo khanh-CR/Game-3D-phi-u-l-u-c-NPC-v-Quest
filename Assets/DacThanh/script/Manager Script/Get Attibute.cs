@@ -24,4 +24,5 @@ public class GetAttibute : MonoBehaviour
         if(!pos.HasValue) return;
             var obj = Instantiate(t,pos.Value + new Vector3(0,0.5f,0),Quaternion.identity);
     }
+    
 }

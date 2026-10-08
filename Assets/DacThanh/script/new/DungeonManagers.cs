@@ -107,7 +107,7 @@ public class DungeonManagers : MonoBehaviour
                     break;
 
                 case DungeonTileType.Corridor:
-                    SpawnFloor(data.Corridor, basePos);
+                    SpawnFloor(GetPrefab(data.Corridor,w => w.prefab, w => w.Rate), basePos);
                     break;
 
                 case DungeonTileType.Wall:
@@ -115,7 +115,7 @@ public class DungeonManagers : MonoBehaviour
                     break;
 
                 case DungeonTileType.Gate:
-                    SpawnFloor(data.Corridor, basePos);                 // nền dưới gate
+                    SpawnFloor(data.Gate, basePos);                 // nền dưới gate
                     SpawnGate(data.Gate, tile.Position, basePos+ new Vector3(0,0.5f,0));
                     SpawnWallColumn(data.wall, basePos, GateHeight);    // tường phía trên gate
                     break;

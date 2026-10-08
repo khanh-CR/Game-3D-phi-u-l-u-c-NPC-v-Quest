@@ -16,6 +16,7 @@ public enum dungeonType
 [System.Serializable]
 public class Dungeon
 {
+    #region Attributes and constructor 
     // Attribute
     public int Seed;
     public DungeonData dungeonData;
@@ -32,23 +33,25 @@ public class Dungeon
 
     public BSPDungeonGenerators bspGenerator;
 
-    // =========================================================
-    // CONSTRUCTOR - CÓ SEED
-    // =========================================================
+
     public Dungeon(int seed, int level, DungeonData dungeonData)
     {
+        //seed system
         Seed = seed;
-
-        // Mọi Random.* trong BSP / Corridor / InitRoomId dùng chung state này,
-        // nên cùng seed => cùng dungeon. Xong thì trả state cũ lại.
         Random.State previous = Random.state;
         Random.InitState(seed);
 
         Build(level, dungeonData);
-
         Random.state = previous;
     }
-
+    public RectInt Bounds
+    {
+        get
+        {
+            return new RectInt(Vector2Int.zero, dungeonSize);
+        }
+    }
+    #endregion
     private void Build(int level, DungeonData data)
     {
         if (level <= 0) level = 1;
@@ -62,83 +65,19 @@ public class Dungeon
 
         // 1. Tạo tile
         CreateDungeonTiles();
-
         // 2. BSP tạo room (minLeafSize, minRoomSize, roomPadding)
         bspGenerator = new BSPDungeonGenerators(this, 20, 15, 1);
         bspGenerator.Generate();
-
         // 3. Lấy list room
         rooms = bspGenerator.rooms;
-
         // 4. Copy tile của room vào dungeon
         CopyRoomTilesToDungeon();
-
         // 5. Tạo ID sau khi room đã xong
         InitRoomId();
-
         // 6. Corridor + tường quanh corridor
         GenerateCorridors();
-
         Debug.Log($"Seed: {Seed}, Level: {Level}, Size: {dungeonSize}, Rooms: {rooms.Count}");
     }
-
-    // =========================================================
-    // INIT ROOM ID
-    // =========================================================
-    private void InitRoomId()
-    {
-        List<int> ids = Enumerable
-            .Range(0, rooms.Count)
-            .OrderBy(x => Random.value)
-            .ToList();
-
-        for (int i = 0; i < rooms.Count; i++)
-        {
-            rooms[i].idRoom = ids[i];
-        }
-        roomById.Clear();
-        for (int i = 0; i < rooms.Count; i++)
-        {
-            rooms[i].idRoom = ids[i];
-            roomById[ids[i]] = rooms[i];
-        }
-    }
-
-    private void GenerateCorridors()
-    {
-        var gen = new CorridorGenerator(this);   // (this, loopChance, maxLoopDistance, corridorHalfWidth)
-        gen.Generate(bspGenerator.Root);
-        startRoom = gen.StartRoom;
-        endRoom = gen.EndRoom;
-    }
-
-    // =========================================================
-    // DUNGEON TYPE
-    // =========================================================
-    private dungeonType Dungeontype(int level)
-    {
-        if (level <= 1) return dungeonType.Minor;
-        if (level <= 4) return dungeonType.Lesser;
-        if (level <= 6) return dungeonType.Medium;
-        if (level <= 8) return dungeonType.Huge;
-        if (level <= 9) return dungeonType.Large;
-        return dungeonType.Ultra;
-    }
-
-    // =========================================================
-    // DUNGEON BOUNDS
-    // =========================================================
-    public RectInt Bounds
-    {
-        get
-        {
-            return new RectInt(Vector2Int.zero, dungeonSize);
-        }
-    }
-
-    // =========================================================
-    // CREATE DUNGEON TILES
-    // =========================================================
     private void CreateDungeonTiles()
     {
         dungeonTiles.Clear();
@@ -162,10 +101,43 @@ public class Dungeon
             }
         }
     }
+    private void InitRoomId()
+    {
+        List<int> ids = Enumerable
+            .Range(0, rooms.Count)
+            .OrderBy(x => Random.value)
+            .ToList();
 
-    // =========================================================
-    // COPY ROOM TILES -> DUNGEON
-    // =========================================================
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            rooms[i].idRoom = ids[i];
+        }
+        roomById.Clear();
+        for (int i = 0; i < rooms.Count; i++)
+        {
+            rooms[i].idRoom = ids[i];
+            roomById[ids[i]] = rooms[i];
+        }
+    }
+
+    private void GenerateCorridors()
+    {
+        // (this, loopChance, maxLoopDistance, corridorHalfWidth)
+        var gen = new CorridorGenerator(this);   
+        gen.Generate(bspGenerator.Root);
+        startRoom = gen.StartRoom;
+        endRoom = gen.EndRoom;
+    }
+    private dungeonType Dungeontype(int level)
+    {
+        if (level <= 1) return dungeonType.Minor;
+        if (level <= 4) return dungeonType.Lesser;
+        if (level <= 6) return dungeonType.Medium;
+        if (level <= 8) return dungeonType.Huge;
+        if (level <= 9) return dungeonType.Large;
+        return dungeonType.Ultra;
+    }
+
     private void CopyRoomTilesToDungeon()
     {
         foreach (DungeonRoom room in rooms)
