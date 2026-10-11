@@ -43,7 +43,7 @@ public class DungeonRoom
     public Dictionary<Vector2Int, DungeonTile> roomTiles = new Dictionary<Vector2Int, DungeonTile>();
     [System.NonSerialized] public List<DungeonRoom> connections = new List<DungeonRoom>();
     public List<Vector2Int> gates = new List<Vector2Int>();
-
+    public GameObject NavMeshRoom;
     public RectInt Bounds
     {
         get

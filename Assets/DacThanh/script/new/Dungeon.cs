@@ -55,7 +55,10 @@ public class Dungeon
     private void Build(int level, DungeonData data)
     {
         if (level <= 0) level = 1;
-
+        else if (level > 10)
+        {
+            level = 10;
+        }
         Level = level;
         Type = Dungeontype(level);
         roomCount = Random.Range(Level, Level * Level + 1);

@@ -18,7 +18,7 @@ public class DungeonData : ScriptableObject
     public List<CorridorPrefab> Corridor;   // pivot ở giữa, kích thước 1 ô
     public GameObject Gate;       // pivot Ở ĐÁY, cao 2 ô
     public List<DecorPrefab> Decor;
-    
+    public GameObject roof;   
     [Header("Monster")]
     public List<MonsterPrefab> monster;
     public GameObject Boss;

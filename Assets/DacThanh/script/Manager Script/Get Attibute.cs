@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,5 +25,22 @@ public class GetAttibute : MonoBehaviour
         if(!pos.HasValue) return;
             var obj = Instantiate(t,pos.Value + new Vector3(0,0.5f,0),Quaternion.identity);
     }
+
+    public void SpawnInCenterRoom()
+    {
+        DungeonRoom room = DungeonManagers.instance.GetRoomById(id);
+        for (int i = 0; i < room.Width; i++)
+        {
+            for (int j = 0; j < room.Height; j++)
+            {
+                if (i == room.Width / 2 && j == room.Height / 2)
+                {
+                    Vector3? pos = DungeonManagers.instance.GetPosOfRoomId(id, i, j);
+                    if(!pos.HasValue) return;
+                    var obj = Instantiate(t,pos.Value + new Vector3(0,0.5f,0),Quaternion.identity);
+                }
+            }
+        }
+    }
     
-}
+}           
