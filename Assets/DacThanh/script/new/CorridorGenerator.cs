@@ -32,6 +32,13 @@ public class CorridorGenerator
     private readonly int corridorHalfWidth;   // 1 => rộng 3 ô, 2 => rộng 5 ô
     private readonly List<List<Vector2Int>> paths = new List<List<Vector2Int>>();
 
+    //các room type được đưa vào xác xuất để gán cho các room ngoại trừ 2 type mặc định phải có là start và boss
+    private static readonly RoomType[] RandomTypes =
+    {
+        RoomType.Empty,
+        RoomType.Normal,
+        RoomType.Other
+    };
     public CorridorGenerator(Dungeon dungeon, float loopChance = 0.15f, int maxLoopDistance = 40, int corridorHalfWidth = 1)
     {
         this.dungeon = dungeon;
@@ -66,7 +73,7 @@ public class CorridorGenerator
         EndRoom = Farthest(StartRoom);
         StartRoom.roomType = RoomType.Start;
         EndRoom.roomType = RoomType.Boss;
-
+        AssignRoomTypes();
         // B3
         AddLoops();
 
@@ -405,4 +412,32 @@ public class CorridorGenerator
             return top;
         }
     }
+
+    #region Gán Type cho room
+    private void AssignRoomTypes()
+    {
+        if (dungeon.Level == 1) return;
+        // Tổng weight
+        int total = 0;
+        foreach (RoomType t in RandomTypes)
+            total += (int)t;
+
+        foreach (DungeonRoom room in dungeon.rooms)
+        {
+            if (room == StartRoom || room == EndRoom) continue;
+
+            int roll = Random.Range(0, total);
+            foreach (RoomType t in RandomTypes)
+            {
+                int rate = (int)t;
+                if (roll < rate)
+                {
+                    room.roomType = t;
+                    break;
+                }
+                roll -= rate;
+            }
+        }
+    }
+    #endregion
 }
