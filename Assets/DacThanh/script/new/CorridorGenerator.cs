@@ -31,6 +31,7 @@ public class CorridorGenerator
     // size corridor
     private readonly int corridorHalfWidth;   // 1 => rộng 3 ô, 2 => rộng 5 ô
     private readonly List<List<Vector2Int>> paths = new List<List<Vector2Int>>();
+    private readonly List<CorridorLink> pathLinks = new List<CorridorLink>();   // song song với paths
 
     //các room type được đưa vào xác xuất để gán cho các room ngoại trừ 2 type mặc định phải có là start và boss
     private static readonly RoomType[] RandomTypes =
@@ -58,6 +59,8 @@ public class CorridorGenerator
 
         edges.Clear();
         paths.Clear();
+        pathLinks.Clear();
+        dungeon.corridorOwner.Clear();
         foreach (DungeonRoom r in rooms)
         {
             r.connections.Clear();
@@ -92,8 +95,11 @@ public class CorridorGenerator
 
         int h = corridorHalfWidth;
 
-        foreach (List<Vector2Int> path in paths)
+        for (int i = 0; i < paths.Count; i++)
         {
+            List<Vector2Int> path = paths[i];
+            CorridorLink link = pathLinks[i];
+
             foreach (Vector2Int p in path)
             {
                 for (int dx = -h; dx <= h; dx++)
@@ -107,6 +113,7 @@ public class CorridorGenerator
                             t.Type == DungeonTileType.Empty)
                         {
                             SetType(q, DungeonTileType.Corridor);
+                            dungeon.corridorOwner[q] = link;
                         }
                     }
                 }
@@ -114,15 +121,17 @@ public class CorridorGenerator
         }
     }
 
-    // Ô Empty nằm cạnh corridor (kể cả chéo) -> Wall
+    // Ô Empty nằm cạnh corridor (kể cả chéo) -> Wall, wall thuộc corridor đã chạm tới nó đầu tiên
     private void WrapCorridorsWithWall()
     {
         // Gom trước rồi mới sửa, vì không được sửa Dictionary khi đang duyệt
-        List<Vector2Int> toWall = new List<Vector2Int>();
+        Dictionary<Vector2Int, CorridorLink> toWall = new Dictionary<Vector2Int, CorridorLink>();
 
         foreach (var kv in tiles)
         {
             if (kv.Value.Type != DungeonTileType.Corridor) continue;
+
+            dungeon.corridorOwner.TryGetValue(kv.Key, out CorridorLink link);
 
             for (int dx = -1; dx <= 1; dx++)
             {
@@ -131,14 +140,22 @@ public class CorridorGenerator
                     if (dx == 0 && dy == 0) continue;
 
                     Vector2Int q = kv.Key + new Vector2Int(dx, dy);
-                    if (tiles.TryGetValue(q, out DungeonTile t) && t.Type == DungeonTileType.Empty)
-                        toWall.Add(q);
+                    if (tiles.TryGetValue(q, out DungeonTile t) &&
+                        t.Type == DungeonTileType.Empty &&
+                        !toWall.ContainsKey(q))
+                    {
+                        toWall.Add(q, link);
+                    }
                 }
             }
         }
 
-        foreach (Vector2Int q in toWall)
-            SetType(q, DungeonTileType.Wall);
+        foreach (var kv in toWall)
+        {
+            SetType(kv.Key, DungeonTileType.Wall);
+            if (kv.Value != null)
+                dungeon.corridorOwner[kv.Key] = kv.Value;
+        }
     }
 
     // =========================================================
@@ -252,10 +269,16 @@ public class CorridorGenerator
             a.gates.Add(gateA);
             b.gates.Add(gateB);
 
+            CorridorLink link = new CorridorLink(a, b);
             foreach (Vector2Int p in path)
-                if (tiles[p].Type == DungeonTileType.Empty)
-                    SetType(p, DungeonTileType.Corridor);
+            {
+                if (tiles[p].Type != DungeonTileType.Empty) continue;
+
+                SetType(p, DungeonTileType.Corridor);
+                dungeon.corridorOwner[p] = link;
+            }
             paths.Add(path);
+            pathLinks.Add(link);
             return;
         }
 

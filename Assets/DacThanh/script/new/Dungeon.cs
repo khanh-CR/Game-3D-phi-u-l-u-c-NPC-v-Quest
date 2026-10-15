@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
-public enum dungeonType
+public enum dungeonSize
 {
     Minor = 15,
     Lesser = 25,
@@ -12,6 +12,17 @@ public enum dungeonType
     Large = 55,
     Ultra = 60
 }
+public class CorridorLink
+{
+    public readonly DungeonRoom A;
+    public readonly DungeonRoom B;
+
+    public CorridorLink(DungeonRoom a, DungeonRoom b)
+    {
+        A = a;
+        B = b;
+    }
+}
 
 [System.Serializable]
 public class Dungeon
@@ -19,28 +30,27 @@ public class Dungeon
     #region Attributes and constructor 
     // Attribute
     public int Seed;
-    public DungeonData dungeonData;
     public int Level;
-    public int roomCount;
-    public dungeonType Type;
-    public Vector2Int dungeonSize;
+    public DungeonData dungeonData;
+
+    public dungeonSize dungeonSize;
+    public Vector2Int size;
     public DungeonRoom startRoom, endRoom;
     public Dictionary<int, DungeonRoom> roomById = new Dictionary<int, DungeonRoom>();
-    // List
-    // Key = (x, z) trong thế giới 3D
-    public Dictionary<Vector2Int, DungeonTile> dungeonTiles = new Dictionary<Vector2Int, DungeonTile>();
     public List<DungeonRoom> rooms = new List<DungeonRoom>();
-
+    // Tile Corridor / Wall bao quanh corridor -> corridor sở hữu nó
+    public Dictionary<Vector2Int, DungeonTile> dungeonTiles = new Dictionary<Vector2Int, DungeonTile>();
+    public Dictionary<Vector2Int, CorridorLink> corridorOwner = new Dictionary<Vector2Int, CorridorLink>();
     public BSPDungeonGenerators bspGenerator;
-
-
+    
+    #endregion
+    
+    #region Constructors
     public Dungeon(int seed, int level, DungeonData dungeonData)
     {
-        //seed system
         Seed = seed;
         Random.State previous = Random.state;
         Random.InitState(seed);
-
         Build(level, dungeonData);
         Random.state = previous;
     }
@@ -48,10 +58,12 @@ public class Dungeon
     {
         get
         {
-            return new RectInt(Vector2Int.zero, dungeonSize);
+            return new RectInt(Vector2Int.zero, size);
         }
     }
     #endregion
+    
+    #region Methods
     private void Build(int level, DungeonData data)
     {
         if (level <= 0) level = 1;
@@ -60,31 +72,28 @@ public class Dungeon
             level = 10;
         }
         Level = level;
-        Type = Dungeontype(level);
-        roomCount = Random.Range(Level, Level * Level + 1);
-
-        dungeonSize = new Vector2Int(Level * (int)Type, Level * (int)Type);
+        dungeonSize = Dungeonsize(level);
+        size = new Vector2Int(Level * (int)dungeonSize, Level * (int)dungeonSize);
         dungeonData = data;
-
-        // 1. Tạo tile
         CreateDungeonTiles();
-        // 2. BSP tạo room (minLeafSize, minRoomSize, roomPadding)
-        bspGenerator = new BSPDungeonGenerators(this, 20, 15, 1);
-        bspGenerator.Generate();
-        // 3. Lấy list room
-        rooms = bspGenerator.rooms;
-        // 4. Copy tile của room vào dungeon
-        CopyRoomTilesToDungeon();
-        // 5. Tạo ID sau khi room đã xong
+        GenerateRooms();
         InitRoomId();
-        // 6. Corridor + tường quanh corridor
+        CopyRoomTilesToDungeon();
         GenerateCorridors();
-        Debug.Log($"Seed: {Seed}, Level: {Level}, Size: {dungeonSize}, Rooms: {rooms.Count}");
+        Debug.Log($"Seed: {Seed}, Level: {Level}, Size: {size}, Rooms: {rooms.Count}");
     }
+    private dungeonSize Dungeonsize(int level)
+        {
+            if (level <= 1) return dungeonSize.Minor;
+            if (level <= 4) return dungeonSize.Lesser;
+            if (level <= 6) return dungeonSize.Medium;
+            if (level <= 8) return dungeonSize.Huge;
+            if (level <= 9) return dungeonSize.Large;
+            return dungeonSize.Ultra;
+        } //size dungeon
     private void CreateDungeonTiles()
     {
         dungeonTiles.Clear();
-
         for (int x = Bounds.xMin; x < Bounds.xMax; x++)
         {
             for (int y = Bounds.yMin; y < Bounds.yMax; y++)
@@ -103,14 +112,18 @@ public class Dungeon
                 dungeonTiles.Add(position, new DungeonTile(type, position));
             }
         }
-    }
+    } // tạo khung dungeon
+    private void GenerateRooms()
+        {
+            //BSP tạo room (minLeafSize, minRoomSize, roomPadding)
+            bspGenerator = new BSPDungeonGenerators(this, 20, 15, 1);
+            bspGenerator.Generate();
+        } // phân lô sau đó tạo rooms cho dungeon
+    
     private void InitRoomId()
     {
-        List<int> ids = Enumerable
-            .Range(0, rooms.Count)
-            .OrderBy(x => Random.value)
-            .ToList();
-
+        rooms = bspGenerator.rooms;
+        List<int> ids = Enumerable.Range(0, rooms.Count).OrderBy(x => Random.value).ToList();
         for (int i = 0; i < rooms.Count; i++)
         {
             rooms[i].idRoom = ids[i];
@@ -121,7 +134,7 @@ public class Dungeon
             rooms[i].idRoom = ids[i];
             roomById[ids[i]] = rooms[i];
         }
-    }
+    } // gán id cho từng room
 
     private void GenerateCorridors()
     {
@@ -130,16 +143,7 @@ public class Dungeon
         gen.Generate(bspGenerator.Root);
         startRoom = gen.StartRoom;
         endRoom = gen.EndRoom;
-    }
-    private dungeonType Dungeontype(int level)
-    {
-        if (level <= 1) return dungeonType.Minor;
-        if (level <= 4) return dungeonType.Lesser;
-        if (level <= 6) return dungeonType.Medium;
-        if (level <= 8) return dungeonType.Huge;
-        if (level <= 9) return dungeonType.Large;
-        return dungeonType.Ultra;
-    }
+    } // tạo lối đi cho dungeon
 
     private void CopyRoomTilesToDungeon()
     {
@@ -155,8 +159,9 @@ public class Dungeon
                 dungeonTiles[roomTile.Position] = dungeonTile;
             }
         }
-    }
-
+    } 
+    #endregion
+    
     #region Tra cứu
 
     public bool TryGetRoom(int id, out DungeonRoom room)
