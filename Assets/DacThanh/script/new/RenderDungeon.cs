@@ -44,81 +44,25 @@ public class RenderDungeon
         cfg = config;
         renderRandom = new System.Random(dungeon.Seed);
     }
-    public void Render()
-    {
-        if (dungeon == null)
-        {
-            Debug.LogError("Dungeon null file:RenderDungeon");
-            return;
-        }
-
-        DungeonData data = dungeon.dungeonData;
-        if (data == null)
-        {
-            Debug.LogError("DungeonData null file:RenderDungeon");
-            return;
-        }
-
-        // Dungeon luôn spawn tại (0, 0, 0)
-        dungeonRoot = new GameObject("Dungeon").transform;
-        dungeonRoot.position = Vector3.zero;
-
-        BuildHierarchy();
-
-        foreach (DungeonTile tile in dungeon.dungeonTiles.Values)
-        {
-            Vector2Int pos = tile.Position;
-
-            // tile.x -> world x, tile.y -> world z, chiều cao là y
-            Vector3 basePos = new Vector3(pos.x * tileSize, 0f, pos.y * tileSize);
-
-            switch (tile.Type)
-            {
-                case DungeonTileType.Floor:
-                    SpawnFloor(GetPrefab(data.Floors, w => w.prefab, w => w.Rate),
-                               basePos, GetFloorParent(pos), FloorTileName(pos));
-                    break;
-
-                case DungeonTileType.Corridor:
-                    SpawnFloor(GetPrefab(data.Corridor, w => w.prefab, w => w.Rate),
-                               basePos, GetCorridorParent(pos), $"({pos.x},{pos.y})");
-                    break;
-
-                case DungeonTileType.Wall:
-                    SpawnWallColumn(data.wall, basePos, 0, GetWallParent(pos));
-                    break;
-
-                case DungeonTileType.Gate:
-                    // Gate nằm trên tường room => thuộc room đó
-                    SpawnFloor(GetPrefab(data.Floors, w => w.prefab, w => w.Rate),
-                               basePos, GetFloorParent(pos), FloorTileName(pos));           // nền dưới gate
-                    SpawnGate(data.Gate, pos, basePos + new Vector3(0, 0.5f, 0), GetFloorParent(pos));
-                    SpawnWallColumn(data.wall, basePos, GateHeight, GetWallParent(pos));    // tường phía trên gate
-                    break;
-
-                // Empty: không render
-            }
-        }
-
-        BuildRoomNavMeshes();
-        // SpawnRoof(data);
-        SpawnRoomLights();
-    }
-
-    // Xoá toàn bộ dungeon đã render
+    
     public void Clear()
     {
         if (dungeonRoot == null) return;
-
+        // clear navmesh
+        if (DungeonNavMesh != null)
+            DungeonNavMesh.RemoveData();
+        dungeonRoot.gameObject.SetActive(false);
+        //destroy dungeon
         if (Application.isPlaying) Object.Destroy(dungeonRoot.gameObject);
         else Object.DestroyImmediate(dungeonRoot.gameObject);
-
+        //clear tile
+        DungeonNavMesh = null;
         dungeonRoot = null;
         globalWallRoot = null;
         tileToRoom.Clear();
         roomRoots.Clear();
         roomWallRoots.Clear();
-        corridorRoots.Clear();
+        corridorRoots.Clear();      
         corridorWallRoots.Clear();
     }
 
@@ -210,7 +154,69 @@ public class RenderDungeon
     }
     #endregion
 
-    private void SpawnFloor(GameObject prefab, Vector3 basePos, Transform parent, string tileName)
+    #region Method Build
+    public void Render()
+    {
+        if (dungeon == null)
+        {
+            Debug.LogError("Dungeon null file:RenderDungeon");
+            return;
+        }
+
+        DungeonData data = dungeon.dungeonData;
+        if (data == null)
+        {
+            Debug.LogError("DungeonData null file:RenderDungeon");
+            return;
+        }
+
+        // Dungeon luôn spawn tại (0, 0, 0)
+        dungeonRoot = new GameObject("Dungeon").transform;
+        dungeonRoot.position = Vector3.zero;
+
+        BuildHierarchy();
+
+        foreach (DungeonTile tile in dungeon.dungeonTiles.Values)
+        {
+            Vector2Int pos = tile.Position;
+
+            // tile.x -> world x, tile.y -> world z, chiều cao là y
+            Vector3 basePos = new Vector3(pos.x * tileSize, 0f, pos.y * tileSize);
+
+            switch (tile.Type)
+            {
+                case DungeonTileType.Floor:
+                    SpawnFloor(GetPrefab(data.Floors, w => w.prefab, w => w.Rate),
+                               basePos, GetFloorParent(pos), FloorTileName(pos));
+                    break;
+
+                case DungeonTileType.Corridor:
+                    SpawnFloor(GetPrefab(data.Corridor, w => w.prefab, w => w.Rate),
+                               basePos, GetCorridorParent(pos), $"({pos.x},{pos.y})");
+                    break;
+
+                case DungeonTileType.Wall:
+                    SpawnWallColumn(data.wall, basePos, 0, GetWallParent(pos));
+                    break;
+
+                case DungeonTileType.Gate:
+                    // Gate nằm trên tường room => thuộc room đó
+                    SpawnFloor(GetPrefab(data.Floors, w => w.prefab, w => w.Rate),
+                               basePos, GetFloorParent(pos), FloorTileName(pos));           // nền dưới gate
+                    SpawnGate(data.Gate, pos, basePos, GetFloorParent(pos));
+                    SpawnWallColumn(data.wall, basePos, GateHeight, GetWallParent(pos));    // tường phía trên gate
+                    break;
+
+                // Empty: không render
+            }
+        }
+
+        BuildDungeonNavMesh();
+        // BuildRoomNavMeshes();
+        // SpawnRoof(data);
+        SpawnRoomLights();
+    }
+        private void SpawnFloor(GameObject prefab, Vector3 basePos, Transform parent, string tileName)
     {
         if (prefab == null) return;
 
@@ -220,8 +226,6 @@ public class RenderDungeon
                                            parent);
         go.name = tileName;
     }
-
-    // Xếp block từ tầng startLevel đến wallHeight - 1
     private void SpawnWallColumn(GameObject prefab, Vector3 basePos, int startLevel, Transform parent)
     {
         if (prefab == null) return;
@@ -232,8 +236,6 @@ public class RenderDungeon
             Object.Instantiate(prefab, pos, Quaternion.identity, parent);
         }
     }
-
-    // Mái phủ toàn bộ dungeon, nằm ngay trên đỉnh tường (tầng chỉ số = wallHeight)
     private void SpawnRoof(DungeonData data)
     {
         if (data.roof == null) return;
@@ -254,7 +256,6 @@ public class RenderDungeon
             }
         }
     }
-
     // Mỗi room 1 đèn ở giữa phòng
     private void SpawnRoomLights()
     {
@@ -277,20 +278,27 @@ public class RenderDungeon
             l.color = cfg.lightColor;
         }
     }
-
     private void SpawnGate(GameObject prefab, Vector2Int tilePos, Vector3 basePos, Transform parent)
     {
         if (prefab == null) return;
 
-        // Tường chạy theo X => lối đi theo Z => ô trên hoặc dưới là sàn / corridor
+        
         bool wallAlongX = IsWalkable(tilePos + Vector2Int.up) ||
                           IsWalkable(tilePos + Vector2Int.down);
 
         Quaternion rot = wallAlongX ? Quaternion.identity : Quaternion.Euler(0f, 90f, 0f);
 
-        Object.Instantiate(prefab, basePos, rot, parent);
+        var gateObj = Object.Instantiate(prefab, basePos, rot, parent);
+        if (tileToRoom.TryGetValue(tilePos, out DungeonRoom room))
+        {
+            Gate gate = gateObj.GetComponentInChildren<Gate>();
+            if (gate != null) gate.dungeonRoom = room;
+        }
+        
     }
 
+
+    #endregion
     private void BuildRoomNavMeshes()
     {
         foreach (DungeonRoom room in dungeon.rooms)
@@ -321,7 +329,58 @@ public class RenderDungeon
             surface.BuildNavMesh();
         }
     }
+    public NavMeshSurface DungeonNavMesh { get; private set; }
+    private void BuildDungeonNavMesh()
+    {
+        RectInt b = dungeon.Bounds;
 
+        // Phần bên trong = bỏ 1 ô tường viền mỗi cạnh
+        int innerW = b.width - 2;
+        int innerH = b.height - 2;
+        if (innerW <= 0 || innerH <= 0) return;
+
+        // Tile (x) có tâm tại x * tileSize, trải từ x-0.5 đến x+0.5 (theo tileSize).
+        // Vùng trong: từ tile xMin+1 đến xMax-2  =>  tâm = (xMin + xMax - 1) / 2
+        float centerX = (b.xMin + b.xMax - 1) * 0.5f * tileSize;
+        float centerZ = (b.yMin + b.yMax - 1) * 0.5f * tileSize;
+
+        // Sàn có mặt trên ở y = 0, tường cao wallHeight => volume phủ từ dưới sàn đến trên đỉnh tường
+        float volumeHeight = wallHeight * tileSize + 1f;
+        float centerY = wallHeight * tileSize * 0.5f;
+
+        GameObject go = new GameObject("NavMesh_Dungeon");
+        go.transform.SetParent(dungeonRoot, false);
+        go.transform.position = new Vector3(centerX, centerY, centerZ);
+
+        NavMeshSurface surface = go.AddComponent<NavMeshSurface>();
+        surface.collectObjects = CollectObjects.Volume;
+        surface.center = Vector3.zero;
+        surface.size = new Vector3(
+            innerW * tileSize,
+            volumeHeight,
+            innerH * tileSize);
+
+        surface.BuildNavMesh();
+        DungeonNavMesh = surface;
+
+        // Giữ tương thích với code cũ đang dùng room.NavMeshRoom
+        foreach (DungeonRoom room in dungeon.rooms)
+            room.NavMeshRoom = go;
+    }
+
+    #region  Method Support
+
+    private bool IsNextToGate(Vector2Int p)
+    {
+        Vector2Int[] dirs = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+        foreach (Vector2Int d in dirs)
+        {
+            if (dungeon.dungeonTiles.TryGetValue(p + d, out DungeonTile t) &&
+                t.Type == DungeonTileType.Gate)
+                return true;
+        }
+        return false;
+    }
     private bool IsWalkable(Vector2Int p)
     {
         return dungeon.dungeonTiles.TryGetValue(p, out DungeonTile t) && t.IsWalkable;
@@ -350,4 +409,7 @@ public class RenderDungeon
         }
         return null;
     }
+
+    #endregion
+
 }

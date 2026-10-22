@@ -67,9 +67,9 @@ public class Dungeon
     private void Build(int level, DungeonData data)
     {
         if (level <= 0) level = 1;
-        else if (level > 10)
+        else if (level > 8)
         {
-            level = 10;
+            level = 7;
         }
         Level = level;
         dungeonSize = Dungeonsize(level);
@@ -84,11 +84,11 @@ public class Dungeon
     }
     private dungeonSize Dungeonsize(int level)
         {
-            if (level <= 1) return dungeonSize.Minor;
-            if (level <= 4) return dungeonSize.Lesser;
-            if (level <= 6) return dungeonSize.Medium;
-            if (level <= 8) return dungeonSize.Huge;
-            if (level <= 9) return dungeonSize.Large;
+            if (level == 1) return dungeonSize.Minor;
+            if (level == 2) return dungeonSize.Lesser;
+            if (level == 3) return dungeonSize.Medium;
+            if (level <= 5) return dungeonSize.Huge;
+            if (level <= 7) return dungeonSize.Large;
             return dungeonSize.Ultra;
         } //size dungeon
     private void CreateDungeonTiles()

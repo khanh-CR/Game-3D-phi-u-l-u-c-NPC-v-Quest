@@ -13,6 +13,8 @@ public class DungeonData : ScriptableObject
     public DungeonWorld dungeonWorld = DungeonWorld.jungle;
 
     [Header("Dungeon brick")]
+    public bool randomSeed = true;
+    public int seed;
     public List<FloorPrefab> Floors;      // pivot ở giữa, kích thước 1 ô
     public GameObject wall;       // pivot ở giữa, kích thước 1 ô
     public List<CorridorPrefab> Corridor;   // pivot ở giữa, kích thước 1 ô

@@ -21,8 +21,9 @@ public class DungeonRoom
         spawnPosition.y + size.y - 1);
     public int Width => size.x;
     public int Height => size.y;
-    public List<GameObject> Monster;
-    public List<GameObject> Gate;
+    public int wave = 0;
+    public List<GameObject> Monster = new List<GameObject>();
+    public List<GameObject> Gate = new List<GameObject>();
     [Header( " thông tin tọa độ sàn")]
     public Vector2Int InnerMin => Min + Vector2Int.one;
     public Vector2Int InnerMax => Max - Vector2Int.one;
@@ -88,5 +89,16 @@ public class DungeonRoom
                 roomTiles.Add(position, new DungeonTile(type, position));
             }
         }
+    }
+
+    public bool CheckRoomWave()
+    {
+        if (roomType != RoomType.Normal) return false;
+        if (wave >= 4) return false;
+
+        Monster.RemoveAll(m => m == null);
+        if (Monster.Count > 0) return false;
+        wave++;
+        return true;
     }
 }

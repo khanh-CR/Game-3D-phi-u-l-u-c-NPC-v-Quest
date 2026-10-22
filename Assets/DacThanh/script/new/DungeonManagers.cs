@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -5,6 +6,8 @@ using Random = UnityEngine.Random;
 public class DungeonManagers : MonoBehaviour
 {
     #region Attibute
+
+    public GameObject player;
     public static DungeonManagers instance;
     [Header("Seed")]
     public int MasterSeed;
@@ -12,9 +15,10 @@ public class DungeonManagers : MonoBehaviour
 
     [Header("Dungeon")]
     [SerializeField] List<DungeonData> listDungeonsData;
+    public DungeonData data;
     [SerializeField] int Level = 1;
     [SerializeField] int wallHeight = 5;     // số block tường theo trục Y (mặc định 5)
-    [SerializeField] float tileSize = 1f;
+    private const float tileSize = 1f;
     [SerializeField] bool generateOnStart = false;
     [Header("Light")]
     [SerializeField] float lightHeight = 3f;      // độ cao đèn (tính theo ô, từ mặt sàn)
@@ -22,7 +26,7 @@ public class DungeonManagers : MonoBehaviour
     [SerializeField] float lightIntensity = 2f;
     [SerializeField] Color lightColor = Color.white;
 
-    private Dungeon dungeon;
+    public Dungeon dungeon;
     public List<DungeonRoom> dungeonRooms;
     private RenderDungeon dungeonRenderer;
     #endregion
@@ -37,43 +41,57 @@ public class DungeonManagers : MonoBehaviour
         if (generateOnStart) DungeonGenerator();
     }
 
+    private void Update()
+    {
+        
+    }
+
     [ContextMenu("Generate Dungeon")]
     public void DungeonGenerator()
     {
         if (randomSeed)
             MasterSeed = Random.Range(int.MinValue, int.MaxValue);
 
-        CreateDungeon(MasterSeed);
+        CreateDungeon(data);
     }
-
-    public void CreateDungeon(int seed)
-    {
-        CreateDungeon(seed, wallHeight);
-    }
-
     #region BuildDungeon
-    public void CreateDungeon(int seed, int height)
+    public void CreateDungeon(DungeonData data)
     {
-        if (listDungeonsData == null || listDungeonsData.Count == 0)
+        if (data == null)
         {
-            Debug.LogError("DungeonData null file:DungeonManagers");
-            return;
+            if (randomSeed) MasterSeed = Random.Range(int.MinValue, int.MaxValue);
+            if (listDungeonsData == null || listDungeonsData.Count == 0)
+            {
+                Debug.LogError("DungeonData null file:DungeonManagers");
+                return;
+            }
+
+            
+            wallHeight = Mathf.Max(1, wallHeight);
+
+            // Chọn data theo seed để cùng seed luôn cùng giao diện
+            int index = (int)(((long)MasterSeed % listDungeonsData.Count + listDungeonsData.Count) % listDungeonsData.Count);
+            data = listDungeonsData[index];
+
         }
+        else
+        {
+            if (data.randomSeed)
+                MasterSeed = Random.Range(int.MinValue, int.MaxValue);
+            else
+                MasterSeed = data.seed;
 
-        MasterSeed = seed;
-        wallHeight = Mathf.Max(1, height);
-
-        // Chọn data theo seed để cùng seed luôn cùng giao diện
-        int index = (int)(((long)seed % listDungeonsData.Count + listDungeonsData.Count) % listDungeonsData.Count);
-        DungeonData data = listDungeonsData[index];
-
+            wallHeight = Mathf.Max(1, wallHeight);
+        }
+        
         ClearTile();
-        dungeon = new Dungeon(seed, Level, data);
+        dungeon = new Dungeon(MasterSeed, Level, data);
         dungeonRooms = dungeon.rooms;
 
         // Dữ liệu (Dungeon) và phần dựng ra scene (RenderDungeon) tách riêng
         dungeonRenderer = new RenderDungeon(dungeon, BuildRenderConfig());
         dungeonRenderer.Render();
+        
     }
     private DungeonRenderConfig BuildRenderConfig()
     {
@@ -122,4 +140,67 @@ public class DungeonManagers : MonoBehaviour
         return world;
     }
     #endregion
+    [Header("Monster")]
+    [SerializeField] int minMonster = 7;
+    [SerializeField] int maxMonster = 10;   // bao gồm cả 10
+    [SerializeField] int monsterEdgeMargin = 1; // chừa N ô sát tường, tránh quái dính tường/gate
+    public void SpawnMonstersInRoom(DungeonRoom room)
+    {
+        // DungeonRoom room = GetRoomById(roomId);
+        List<MonsterPrefab> list = dungeon.dungeonData.monster;
+        if (room == null || list == null || list.Count == 0) return;
+
+        // Các ô sàn trong room, xáo trộn => lấy từ đầu là không trùng vị trí
+        List<Vector2Int> tiles = new List<Vector2Int>();
+        foreach (DungeonTile t in room.roomTiles.Values)
+            if (t.Type == DungeonTileType.Floor) tiles.Add(t.Position);
+
+        for (int i = tiles.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            (tiles[i], tiles[j]) = (tiles[j], tiles[i]);
+        }
+
+        int count = Mathf.Min(Random.Range(7, 11), tiles.Count);   // 7-10 con
+
+        // Tổng rate
+        int total = 0;
+        foreach (MonsterPrefab m in list)
+            if (m.prefab != null && m.Rate > 0) total += m.Rate;
+        if (total <= 0) return;
+
+        for (int i = 0; i < count; i++)
+        {
+            // Chọn prefab theo rate
+            int roll = Random.Range(0, total);
+            GameObject prefab = null;
+            foreach (MonsterPrefab m in list)
+            {
+                if (m.prefab == null || m.Rate <= 0) continue;
+                if (roll < m.Rate) { prefab = m.prefab; break; }
+                roll -= m.Rate;
+            }
+
+            Vector3 pos = new Vector3(tiles[i].x * tileSize, 0f, tiles[i].y * tileSize);
+            var enemyObj = Instantiate(prefab, pos, Quaternion.identity, dungeonRenderer.Root);
+            room.Monster.Add(enemyObj);
+        }
+    }
+
+    public void SpawnObjectInRoomById(int roomId, GameObject gameObject, int localX, int localY)
+    {
+        DungeonRoom room = GetRoomById(roomId);
+        for (int i = 0; i < room.Width; i++)
+        {
+            for (int j = 0; j < room.Height; j++)
+            {
+                if (i == room.Width / 2 && j == room.Height / 2)
+                {
+                    Vector3? pos = GetPosOfRoomId(roomId, i, j);
+                    if(!pos.HasValue) return;
+                    var obj = Instantiate(gameObject,pos.Value + new Vector3(0,0.5f,0),Quaternion.identity);
+                }
+            }
+        }
+    }
 }
