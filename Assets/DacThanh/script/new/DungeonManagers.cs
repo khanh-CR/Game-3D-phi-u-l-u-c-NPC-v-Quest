@@ -161,7 +161,7 @@ public class DungeonManagers : MonoBehaviour
             (tiles[i], tiles[j]) = (tiles[j], tiles[i]);
         }
 
-        int count = Mathf.Min(Random.Range(7, 11), tiles.Count);   // 7-10 con
+        int count = Mathf.Min(Random.Range(1, 2), tiles.Count);   // 7-10 con
 
         // Tổng rate
         int total = 0;

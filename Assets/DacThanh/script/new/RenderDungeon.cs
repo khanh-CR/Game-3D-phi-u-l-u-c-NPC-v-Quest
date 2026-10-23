@@ -335,7 +335,7 @@ public class RenderDungeon
         RectInt b = dungeon.Bounds;
 
         // Phần bên trong = bỏ 1 ô tường viền mỗi cạnh
-        int innerW = b.width - 2;
+        int innerW = b.width - 2;   
         int innerH = b.height - 2;
         if (innerW <= 0 || innerH <= 0) return;
 
@@ -345,7 +345,7 @@ public class RenderDungeon
         float centerZ = (b.yMin + b.yMax - 1) * 0.5f * tileSize;
 
         // Sàn có mặt trên ở y = 0, tường cao wallHeight => volume phủ từ dưới sàn đến trên đỉnh tường
-        float volumeHeight = wallHeight * tileSize + 1f;
+        float volumeHeight = wallHeight * tileSize+2f;
         float centerY = wallHeight * tileSize * 0.5f;
 
         GameObject go = new GameObject("NavMesh_Dungeon");
