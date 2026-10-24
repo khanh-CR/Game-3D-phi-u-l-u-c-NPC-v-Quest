@@ -188,8 +188,10 @@ public class RenderDungeon
                 case DungeonTileType.Floor:
                     SpawnFloor(GetPrefab(data.Floors, w => w.prefab, w => w.Rate),
                                basePos, GetFloorParent(pos), FloorTileName(pos));
+                    SpawnDecor(GetPrefab(data.Decor, w => w.prefab, w => w.Rate),pos,
+                        basePos, GetFloorParent(pos), FloorTileName(pos));
                     break;
-
+                
                 case DungeonTileType.Corridor:
                     SpawnFloor(GetPrefab(data.Corridor, w => w.prefab, w => w.Rate),
                                basePos, GetCorridorParent(pos), $"({pos.x},{pos.y})");
@@ -198,7 +200,7 @@ public class RenderDungeon
                 case DungeonTileType.Wall:
                     SpawnWallColumn(data.wall, basePos, 0, GetWallParent(pos));
                     break;
-
+                
                 case DungeonTileType.Gate:
                     // Gate nằm trên tường room => thuộc room đó
                     SpawnFloor(GetPrefab(data.Floors, w => w.prefab, w => w.Rate),
@@ -215,8 +217,8 @@ public class RenderDungeon
         // BuildRoomNavMeshes();
         // SpawnRoof(data);
         SpawnRoomLights();
-    }
-        private void SpawnFloor(GameObject prefab, Vector3 basePos, Transform parent, string tileName)
+    } 
+    private void SpawnFloor(GameObject prefab, Vector3 basePos, Transform parent, string tileName)
     {
         if (prefab == null) return;
 
@@ -225,6 +227,16 @@ public class RenderDungeon
                                            Quaternion.identity,
                                            parent);
         go.name = tileName;
+    }
+    private void SpawnDecor(GameObject prefab, Vector2Int tilePos, Vector3 basePos, Transform parent, string tileName)
+    {
+        if (prefab == null) return;
+        if (Random.value > 0.05f){ return;}
+        Quaternion rot = Quaternion.Euler(0f, Random.Range(0f,90f), 0f);
+        GameObject Decor = Object.Instantiate(prefab,basePos,
+            rot,
+            parent);
+        Decor.name = tileName;
     }
     private void SpawnWallColumn(GameObject prefab, Vector3 basePos, int startLevel, Transform parent)
     {
@@ -345,7 +357,7 @@ public class RenderDungeon
         float centerZ = (b.yMin + b.yMax - 1) * 0.5f * tileSize;
 
         // Sàn có mặt trên ở y = 0, tường cao wallHeight => volume phủ từ dưới sàn đến trên đỉnh tường
-        float volumeHeight = wallHeight * tileSize+2f;
+        float volumeHeight = wallHeight * tileSize+1f;
         float centerY = wallHeight * tileSize * 0.5f;
 
         GameObject go = new GameObject("NavMesh_Dungeon");

@@ -29,7 +29,9 @@ MonoBehaviour:
   - prefab: {fileID: 9186243745350663760, guid: fda58f322e0926f449b69dd8d528fdfc, type: 3}
     Rate: 1
   Gate: {fileID: 6064086913357960400, guid: 52c4aba4ffa479d4a93f779017012f03, type: 3}
-  Decor: []
+  Decor:
+  - prefab: {fileID: 5130197785815031052, guid: 9c5dc25b39bc89a4f9b0cb6d2283b85a, type: 3}
+    Rate: 2
   roof: {fileID: 0}
   monster:
   - prefab: {fileID: 2476040182585028684, guid: 88acc181dbea381469fee5517eb35458, type: 3}
