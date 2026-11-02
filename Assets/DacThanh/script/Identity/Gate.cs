@@ -42,7 +42,7 @@ public class Gate : MonoBehaviour
                 Debug.LogError("Không tìm thấy Component PlayerUI trên GameObject Player!");
                 return;
             }
-            playerUI.playerUi.SetActive(true);
+            // playerUI.playerUi.SetActive(true);
             playerUI.currentGate = this;
         }
     }
@@ -57,7 +57,7 @@ public class Gate : MonoBehaviour
                 Debug.LogError("Không tìm thấy Component PlayerUI trên GameObject Player!");
                 return;
             }
-            playerUI.playerUi.SetActive(false);
+            // playerUI.playerUi.SetActive(false);
             if (playerUI.currentGate == this)
             {
                 playerUI.currentGate = null;
