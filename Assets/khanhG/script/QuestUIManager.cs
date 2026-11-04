@@ -9,7 +9,8 @@ public class QuestUIManager : MonoBehaviour
     [Header("Quest UI")]
     [SerializeField] private GameObject questPanel;
 
-    [Header("Buttons")]
+    [Header("Quest Icon - Always Visible")]
+    [SerializeField] private GameObject questIcon;
     [SerializeField] private Button openButton;
     [SerializeField] private Button closeButton;
 
@@ -18,21 +19,37 @@ public class QuestUIManager : MonoBehaviour
     [SerializeField] private TMP_Text questDescriptionText;
     [SerializeField] private TMP_Text questRewardText;
 
+    [Header("NPC Interaction")]
+    [SerializeField] private Transform player;
+    [SerializeField] private Transform npc;
+    [SerializeField] private float interactDistance = 3f;
+
     private bool hasQuest = false;
 
-    void Awake()
+    private bool IsNearNPC()
     {
-        // Ban dau an bang nhiem vu
-        if (questPanel != null)
-            questPanel.SetActive(false);
+        if (player == null || npc == null)
+            return false;
+
+        return Vector3.Distance(player.position, npc.position)
+            <= interactDistance;
     }
 
-    void OnEnable()
+    private void Awake()
+    {
+        if (questPanel != null)
+            questPanel.SetActive(false);
+
+        if (questIcon != null)
+            questIcon.SetActive(true);
+    }
+
+    private void OnEnable()
     {
         if (openButton != null)
         {
-            openButton.onClick.RemoveListener(OpenQuest);
-            openButton.onClick.AddListener(OpenQuest);
+            openButton.onClick.RemoveListener(ToggleQuestFromIcon);
+            openButton.onClick.AddListener(ToggleQuestFromIcon);
         }
 
         if (closeButton != null)
@@ -42,25 +59,41 @@ public class QuestUIManager : MonoBehaviour
         }
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         if (openButton != null)
-            openButton.onClick.RemoveListener(OpenQuest);
+            openButton.onClick.RemoveListener(ToggleQuestFromIcon);
 
         if (closeButton != null)
             closeButton.onClick.RemoveListener(CloseQuest);
     }
 
-    void Update()
+    private void Update()
     {
-        if (Keyboard.current != null &&
-            Keyboard.current.escapeKey.wasPressedThisFrame)
+        if (Keyboard.current == null)
+            return;
+
+        // E chi hoat dong khi gan NPC
+        if (Keyboard.current.eKey.wasPressedThisFrame)
         {
-            CloseQuest();
+            if (IsNearNPC())
+            {
+                if (hasQuest)
+                    ToggleQuest();
+                else
+                    Debug.Log("Chua nhan nhiem vu!");
+            }
+            else
+            {
+                Debug.Log("Qua xa NPC!");
+            }
         }
+
+        // ESC dong bang, khong tat icon
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+            CloseQuest();
     }
 
-    // NPC goi ham nay khi nhan nhiem vu
     public void SetQuest(
         string questName,
         string description,
@@ -77,42 +110,43 @@ public class QuestUIManager : MonoBehaviour
         if (questRewardText != null)
             questRewardText.text = "Phan thuong: " + reward;
 
-        OpenQuest();
+        CloseQuest();
+
+        if (questIcon != null)
+            questIcon.SetActive(true);
     }
 
-    // Bam icon Quest de mo bang
-    public void OpenQuest()
+    // Bam icon de mo/tat bang o bat ky dau
+    public void ToggleQuestFromIcon()
     {
-        if (questPanel == null)
-        {
-            Debug.LogError("Chua gan QuestPanel!");
-            return;
-        }
-
         if (!hasQuest)
         {
             Debug.Log("Chua nhan nhiem vu!");
             return;
         }
 
-        questPanel.SetActive(true);
-
-        Debug.Log("DA MO LAI BANG NHIEM VU");
+        ToggleQuest();
     }
 
-    // Bam X hoac ESC de dong
+    public void OpenQuest()
+    {
+        if (questPanel != null && hasQuest)
+            questPanel.SetActive(true);
+    }
+
     public void CloseQuest()
     {
         if (questPanel != null)
             questPanel.SetActive(false);
 
-        Debug.Log("DA DONG BANG NHIEM VU");
+        // Luon giu icon hien thi
+        if (questIcon != null)
+            questIcon.SetActive(true);
     }
 
-    // Ho tro neu script khac goi ToggleQuest
     public void ToggleQuest()
     {
-        if (questPanel == null || !hasQuest)
+        if (questPanel == null)
             return;
 
         if (questPanel.activeSelf)
