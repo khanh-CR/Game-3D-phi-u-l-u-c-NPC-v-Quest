@@ -77,8 +77,7 @@ public class Gate : MonoBehaviour
         isOpening = true;
         isOpened = true;
         Debug.Log("bắt đầu mở cửa");
-        dungeonRoom.CheckRoomWave();
-        roomActive = true;
+        if(dungeonRoom.CheckRoomWave()) roomActive = true;
     }
 
     public void CloseTheGate()
