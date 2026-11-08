@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: DungeonData
   m_EditorClassIdentifier: Assembly-CSharp::DungeonData
   dungeonWorld: 0
-  randomSeed: 0
+  level: 4
+  randomSeed: 1
   seed: 2
   Floors:
   - prefab: {fileID: 9186243745350663760, guid: fe85e38c374089c4786f1340a7a30f99, type: 3}
@@ -37,4 +38,6 @@ MonoBehaviour:
   - prefab: {fileID: 2476040182585028684, guid: 88acc181dbea381469fee5517eb35458, type: 3}
     Rate: 1
   Boss: {fileID: 0}
-  NPC: {fileID: 0}
+  others:
+  - prefab: {fileID: 5200053343832838858, guid: 8fb406151949de54fbb2371b52f9cde6, type: 3}
+    Rate: 2

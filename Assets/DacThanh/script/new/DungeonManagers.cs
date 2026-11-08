@@ -82,6 +82,7 @@ public class DungeonManagers : MonoBehaviour
                 MasterSeed = data.seed;
 
             wallHeight = Mathf.Max(1, wallHeight);
+            Level = data.level;
         }
         
         ClearTile();

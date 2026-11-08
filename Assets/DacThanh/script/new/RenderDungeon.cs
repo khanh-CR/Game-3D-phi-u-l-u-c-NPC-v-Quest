@@ -215,8 +215,9 @@ public class RenderDungeon
 
         BuildDungeonNavMesh();
         // BuildRoomNavMeshes();
-        // SpawnRoof(data);
+        SpawnRoof(data);
         SpawnRoomLights();
+        SpawnOthers(data);  
     } 
     private void SpawnFloor(GameObject prefab, Vector3 basePos, Transform parent, string tileName)
     {
@@ -237,6 +238,24 @@ public class RenderDungeon
             rot,
             parent);
         Decor.name = tileName;
+    }
+    private void SpawnOthers(DungeonData data)
+    {
+        if (data.others == null || data.others.Count == 0 || Random.value > 0.9f) return;
+
+        foreach (DungeonRoom room in dungeon.rooms)
+        {
+            if (room.roomType != RoomType.Other) continue;
+
+            GameObject prefab = GetPrefab(data.others, o => o.prefab, o => o.Rate);
+            if (prefab == null) continue;
+            Vector2 center = (Vector2)(room.InnerMin + room.InnerMax) * 0.5f;
+            Vector3 pos = new Vector3(center.x * tileSize, 0f, center.y * tileSize);
+
+            Transform parent = roomRoots.TryGetValue(room, out Transform rr) ? rr : dungeonRoot;
+            GameObject go = Object.Instantiate(prefab, pos, Quaternion.identity, parent);
+            go.name = $"Other_Room_{room.idRoom}";
+        }
     }
     private void SpawnWallColumn(GameObject prefab, Vector3 basePos, int startLevel, Transform parent)
     {

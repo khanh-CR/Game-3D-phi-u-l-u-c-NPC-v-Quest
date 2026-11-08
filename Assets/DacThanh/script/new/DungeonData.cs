@@ -11,7 +11,7 @@ public enum DungeonWorld
 public class DungeonData : ScriptableObject
 {
     public DungeonWorld dungeonWorld = DungeonWorld.jungle;
-
+    public int level = 1;
     [Header("Dungeon brick")]
     public bool randomSeed = true;
     public int seed;
@@ -24,7 +24,8 @@ public class DungeonData : ScriptableObject
     [Header("Monster")]
     public List<MonsterPrefab> monster;
     public GameObject Boss;
-    public GameObject NPC;
+   
+    public List<Others> others;
 }
 
 [System.Serializable]
@@ -47,6 +48,12 @@ public class CorridorPrefab
 }
 [System.Serializable]
 public class MonsterPrefab
+{
+    public GameObject prefab;
+    public int Rate = 1;
+}
+[System.Serializable]
+public class Others
 {
     public GameObject prefab;
     public int Rate = 1;
