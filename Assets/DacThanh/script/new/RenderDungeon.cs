@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Unity.AI.Navigation;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Object = UnityEngine.Object;
 public struct DungeonRenderConfig
@@ -391,7 +392,7 @@ public class RenderDungeon
             innerW * tileSize,
             volumeHeight,
             innerH * tileSize);
-
+        surface.layerMask &= ~(1 << LayerMask.NameToLayer("gate"));
         surface.BuildNavMesh();
         DungeonNavMesh = surface;
 
