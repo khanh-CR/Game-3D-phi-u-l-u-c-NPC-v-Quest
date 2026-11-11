@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -56,28 +57,14 @@ public class CorridorGenerator
     {
         List<DungeonRoom> rooms = dungeon.rooms;
         if (rooms.Count < 2) return;
-
         edges.Clear();
         paths.Clear();
         pathLinks.Clear();
         dungeon.corridorOwner.Clear();
-        foreach (DungeonRoom r in rooms)
-        {
-            r.connections.Clear();
-            r.gates.Clear();
-            r.roomType = RoomType.Normal;
-        }
 
-        // B1
+        SetRoomId(rooms);
         BuildTreeEdges(root);
-
-        // B2
-        StartRoom = Farthest(rooms[0]);
-        EndRoom = Farthest(StartRoom);
-        StartRoom.roomType = RoomType.Start;
-        EndRoom.roomType = RoomType.Boss;
         AssignRoomTypes();
-        // B3
         AddLoops();
 
         // B4
@@ -89,8 +76,28 @@ public class CorridorGenerator
         WrapCorridorsWithWall();
     }
 
-    private void WidenCorridors()
+    public void SetRoomId(List<DungeonRoom> rooms)
     {
+        foreach (var room in rooms)
+        {
+            room.connections.Clear();
+            room.gates.Clear();
+            if (room != null)
+                room.roomType = RoomType.Normal;
+        }
+        StartRoom = null;
+        EndRoom = null;
+        if (rooms == null || rooms.Count < 2)
+        {
+            return;
+        }
+        StartRoom = rooms.Find(room => room != null && room.idRoom == 0);
+        EndRoom = rooms.Find(room => room != null && room.idRoom == rooms.Max(r => r.idRoom));
+        StartRoom.roomType = RoomType.Start;
+        EndRoom.roomType = RoomType.Boss;
+    }
+    private void WidenCorridors()
+    {   
         if (corridorHalfWidth <= 0) return;
 
         int h = corridorHalfWidth;

@@ -324,6 +324,7 @@ public class RenderDungeon
         {
             Gate gate = gateObj.GetComponentInChildren<Gate>();
             if (gate != null) gate.dungeonRoom = room;
+            room.Gate.Add(gate.gameObject);
         }
         
     }

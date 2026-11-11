@@ -88,10 +88,10 @@ public class DungeonManagers : MonoBehaviour
         ClearTile();
         dungeon = new Dungeon(MasterSeed, Level, data);
         dungeonRooms = dungeon.rooms;
-
+        SortDungeonRooms();
         // Dữ liệu (Dungeon) và phần dựng ra scene (RenderDungeon) tách riêng
         dungeonRenderer = new RenderDungeon(dungeon, BuildRenderConfig());
-        dungeonRenderer.Render();
+        dungeonRenderer.Render();   
         
     }
     private DungeonRenderConfig BuildRenderConfig()
@@ -203,5 +203,12 @@ public class DungeonManagers : MonoBehaviour
                 }
             }
         }
+    }
+    public void SortDungeonRooms()
+    {
+        if (dungeonRooms == null || dungeonRooms.Count == 0)
+            return;
+
+        dungeonRooms.Sort((a, b) => a.idRoom.CompareTo(b.idRoom));
     }
 }
