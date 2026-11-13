@@ -244,5 +244,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gate
   HangPoint: {fileID: 51033172154588091}
-  rotateSpeed: 20
+  rotateSpeed: 80
   isOpened: 0
+  dungeonRoom:
+    idRoom: 0
+    wave: 0
+    Monster: []
+    Gate: []
+    roomType: 0
+    size: {x: 0, y: 0}
+    nodeSize: {x: 0, y: 0}
+    roomPadding: 0
+    gates: []
+    NavMeshRoom: {fileID: 0}
+    playerInside: 0

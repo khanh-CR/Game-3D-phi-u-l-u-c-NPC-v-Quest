@@ -1,96 +1,74 @@
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Gate : MonoBehaviour
 {
-    public Transform HangPoint;
-    [SerializeField] private float rotateSpeed = 80f;
-    private bool isOpening = false;
-    public bool isOpened = false;
-    private Quaternion targetRotation;
     public DungeonRoom dungeonRoom;
-    bool roomActive =false;
-    private void Update()
-    {
-        if (!isOpening || HangPoint == null) return;
-        HangPoint.rotation = Quaternion.RotateTowards(
-            HangPoint.rotation,
-            targetRotation,
-            rotateSpeed * Time.deltaTime
-        );
-        if (Quaternion.Angle(targetRotation, HangPoint.rotation) < 0.1f)
-        {
-            HangPoint.rotation = targetRotation;
-            isOpening = false;
-        }
+    public Vector3 insidePos;    // ô sàn trong room, sát gate (RenderDungeon gán)
+    public Vector3 outsidePos;   // ô corridor, sát gate (RenderDungeon gán)
+    [SerializeField] float teleportYOffset = 0.5f;   // chỉnh theo chiều cao sàn/pivot player
 
-        if (roomActive)
-        {
-            DungeonManagers.instance.SpawnMonstersInRoom(dungeonRoom);
-            roomActive = false;
-        }
-    }
+    private PlayerTest playerInRange;
 
     private void OnTriggerStay(Collider other)
-    {   
-        if (other.CompareTag("Player"))
-        {
-            var playerUI = other.GetComponent<PlayerUI>();
-            if (playerUI == null)
-            {
-                Debug.LogError("Không tìm thấy Component PlayerUI trên GameObject Player!");
-                return;
-            }
-            // playerUI.playerUi.SetActive(true);
-            playerUI.currentGate = this;
-        }
+    {
+        if (!other.CompareTag("Player")) return;
+        var playerUI = other.GetComponent<PlayerUI>();
+        if (playerUI == null) { Debug.LogError("Không tìm thấy PlayerUI!"); return; }
+        playerUI.currentGate = this;
+        playerInRange = other.GetComponentInParent<PlayerTest>();
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            var playerUI = other.GetComponent<PlayerUI>();
-            if (playerUI == null)
-            {
-                Debug.LogError("Không tìm thấy Component PlayerUI trên GameObject Player!");
-                return;
-            }
-            // playerUI.playerUi.SetActive(false);
-            if (playerUI.currentGate == this)
-            {
-                playerUI.currentGate = null;
-            }
-        }
+        if (!other.CompareTag("Player")) return;
+        var playerUI = other.GetComponent<PlayerUI>();
+        if (playerUI != null && playerUI.currentGate == this) playerUI.currentGate = null;
+        playerInRange = null;
     }
 
+    // PlayerUI vẫn gọi hàm này khi bấm phím tương tác
     public void OpenTheGate()
     {
-        if (HangPoint == null)
-        {
-            Debug.Log("Chưa gán hangPoint");
-            return;
-        }
-        if (isOpening) return;
-        targetRotation = Quaternion.Euler(0f,0f,0f);
-        isOpening = true;
-        isOpened = true;
-        Debug.Log("bắt đầu mở cửa");
-        if(dungeonRoom.CheckRoomWave()) roomActive = true;
+        if (playerInRange == null || dungeonRoom == null) return;
+
+        if (IsInside(playerInRange.transform.position)) TryExit();
+        else Enter();
     }
 
-    public void CloseTheGate()
+    private bool IsInside(Vector3 p)
     {
-        if (HangPoint == null)
+        Vector3 outDir = outsidePos - insidePos; outDir.y = 0;
+        Vector3 d = p - (insidePos + outsidePos) * 0.5f; d.y = 0;   // tâm gate
+        return Vector3.Dot(d, outDir) < 0;
+    }
+
+    private void Enter()
+    {
+        playerInRange.Teleport(insidePos + Vector3.up * teleportYOffset);
+        dungeonRoom.playerInside = true;
+        DungeonManagers.instance.EnterRoom(dungeonRoom);
+        ClearPlayer();
+    }
+
+    private void TryExit()
+    {
+        if (!dungeonRoom.IsCleared)
         {
-            Debug.Log("Chưa gán hangPoint");
-            return;
+            Debug.Log($"Chưa clear room {dungeonRoom.idRoom} (wave {dungeonRoom.wave}/{dungeonRoom.MaxWave})");
+            return;   // chỗ này có thể hiện thông báo UI
         }
-        if (isOpening) return;
-        targetRotation = Quaternion.Euler(0f,90f,0f);
-        isOpening = true;
-        isOpened = false;
-        Debug.Log("bắt đầu mở cửa");
+        playerInRange.Teleport(outsidePos + Vector3.up * teleportYOffset);
+        dungeonRoom.playerInside = false;
+        DungeonManagers.instance.ExitRoom(dungeonRoom);
+        ClearPlayer();
+    }
+    private void ClearPlayer()
+    {
+        if (playerInRange != null)
+        {
+            var ui = playerInRange.GetComponent<PlayerUI>();
+            if (ui != null && ui.currentGate == this) ui.currentGate = null;
+        }
+        playerInRange = null;
     }
 }

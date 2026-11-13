@@ -321,11 +321,25 @@ public class RenderDungeon
         Quaternion rot = wallAlongX ? Quaternion.identity : Quaternion.Euler(0f, 90f, 0f);
 
         var gateObj = Object.Instantiate(prefab, basePos, rot, parent);
-        if (tileToRoom.TryGetValue(tilePos, out DungeonRoom room))
+        if (!tileToRoom.TryGetValue(tilePos, out DungeonRoom room)) return;
+
+        Gate gate = gateObj.GetComponentInChildren<Gate>();
+        if (gate == null) { Debug.LogError("Prefab Gate thiếu component Gate"); return; }
+
+        gate.dungeonRoom = room;
+        room.Gate.Add(gate.gameObject);
+
+        Vector2Int[] dirs = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+        foreach (Vector2Int d in dirs)
         {
-            Gate gate = gateObj.GetComponentInChildren<Gate>();
-            if (gate != null) gate.dungeonRoom = room;
-            room.Gate.Add(gate.gameObject);
+            if (dungeon.dungeonTiles.TryGetValue(tilePos + d, out DungeonTile o) && o.Type == DungeonTileType.Corridor &&
+                dungeon.dungeonTiles.TryGetValue(tilePos - d, out DungeonTile i) && i.Type == DungeonTileType.Floor)
+            {
+                Vector2Int outT = tilePos + d, inT = tilePos - d;
+                gate.outsidePos = new Vector3(outT.x * tileSize, 0f, outT.y * tileSize);
+                gate.insidePos  = new Vector3(inT.x * tileSize, 0f, inT.y * tileSize);
+                break;
+            }
         }
         
     }

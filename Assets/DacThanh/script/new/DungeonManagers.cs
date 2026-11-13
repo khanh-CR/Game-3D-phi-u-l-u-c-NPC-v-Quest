@@ -40,10 +40,15 @@ public class DungeonManagers : MonoBehaviour
     {
         if (generateOnStart) DungeonGenerator();
     }
+    private DungeonRoom activeRoom;
 
+    public void EnterRoom(DungeonRoom room) => activeRoom = room;
+    public void ExitRoom(DungeonRoom room) { if (activeRoom == room) activeRoom = null; }
     private void Update()
     {
-        
+        if (activeRoom == null) return;
+        // CheckRoomWave chỉ trả true khi hết quái và wave < MaxWave => spawn wave kế
+        if (activeRoom.CheckRoomWave()) SpawnMonstersInRoom(activeRoom);
     }
 
     [ContextMenu("Generate Dungeon")]
@@ -161,8 +166,18 @@ public class DungeonManagers : MonoBehaviour
             int j = Random.Range(0, i + 1);
             (tiles[i], tiles[j]) = (tiles[j], tiles[i]);
         }
-
-        int count = Mathf.Min(Random.Range(1, 2), tiles.Count);   // 7-10 con
+        if (room.roomType == RoomType.Boss)
+        {
+            GameObject boss = dungeon.dungeonData.Boss;
+            if (boss == null) return;
+            Vector2 c = (Vector2)(room.InnerMin + room.InnerMax) * 0.5f;
+            var b = Instantiate(boss, new Vector3(c.x * tileSize, 0f, c.y * tileSize),
+                Quaternion.identity, dungeonRenderer.Root);
+            room.Monster.Add(b);
+            return;
+        }
+        int count = Mathf.Min(Random.Range(minMonster, maxMonster + 1), tiles.Count);
+        // int count = Mathf.Min(Random.Range(1, 2), tiles.Count);   // 7-10 con
 
         // Tổng rate
         int total = 0;
