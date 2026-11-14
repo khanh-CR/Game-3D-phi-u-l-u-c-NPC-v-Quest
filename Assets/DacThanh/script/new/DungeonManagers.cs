@@ -12,7 +12,13 @@ public class DungeonManagers : MonoBehaviour
     [Header("Seed")]
     public int MasterSeed;
     public bool randomSeed = true;
-
+    [Header("Floor")]
+    public int currentFloor = 1;
+    [SerializeField] float playerSpawnY = 0.5f;   // chỉnh theo chiều cao sàn/pivot player
+    [SerializeField] float portalY = 1f;
+    private DungeonData runData;     // data cố định của run (null => chọn theo seed từng tầng)
+    private int runLevel;
+    private bool portalSpawned;
     [Header("Dungeon")]
     [SerializeField] List<DungeonData> listDungeonsData;
     public DungeonData data;
@@ -49,6 +55,8 @@ public class DungeonManagers : MonoBehaviour
         if (activeRoom == null) return;
         // CheckRoomWave chỉ trả true khi hết quái và wave < MaxWave => spawn wave kế
         if (activeRoom.CheckRoomWave()) SpawnMonstersInRoom(activeRoom);
+        if (!portalSpawned && activeRoom.roomType == RoomType.Boss && activeRoom.IsCleared)
+            SpawnPortal(activeRoom);
     }
 
     [ContextMenu("Generate Dungeon")]
@@ -70,10 +78,6 @@ public class DungeonManagers : MonoBehaviour
                 Debug.LogError("DungeonData null file:DungeonManagers");
                 return;
             }
-
-            
-            wallHeight = Mathf.Max(1, wallHeight);
-
             // Chọn data theo seed để cùng seed luôn cùng giao diện
             int index = (int)(((long)MasterSeed % listDungeonsData.Count + listDungeonsData.Count) % listDungeonsData.Count);
             data = listDungeonsData[index];
@@ -85,11 +89,9 @@ public class DungeonManagers : MonoBehaviour
                 MasterSeed = Random.Range(int.MinValue, int.MaxValue);
             else
                 MasterSeed = data.seed;
-
-            wallHeight = Mathf.Max(1, wallHeight);
             Level = data.level;
         }
-        
+        wallHeight = Mathf.Max(1, wallHeight);
         ClearTile();
         dungeon = new Dungeon(MasterSeed, Level, data);
         dungeonRooms = dungeon.rooms;
@@ -99,6 +101,106 @@ public class DungeonManagers : MonoBehaviour
         dungeonRenderer.Render();   
         
     }
+    public void NextFloor()
+    {
+        currentFloor++;
+        // Muốn tầng sâu hơn thì khó hơn: Level = Mathf.Min(runLevel + (currentFloor - 1) / 2, 7);
+        BuildFloor();
+    }
+    private void BuildFloor()
+    {
+        int floorSeed = GetFloorSeed(MasterSeed, currentFloor);
+        DungeonData floorData = runData != null ? runData : PickDataBySeed(floorSeed);
+
+        ClearTile();              // xoá tầng cũ (kể cả quái, cổng cũ vì đều nằm dưới Root)
+        activeRoom = null;
+        portalSpawned = false;
+
+        dungeon = new Dungeon(floorSeed, Level, floorData);
+        dungeonRooms = dungeon.rooms;
+        SortDungeonRooms();
+
+        dungeonRenderer = new RenderDungeon(dungeon, BuildRenderConfig());
+        dungeonRenderer.Render();
+
+        PlacePlayerAtStart();
+    }
+    // Hash xác định (không dùng System.HashCode vì nó khác nhau mỗi lần chạy)
+private static int GetFloorSeed(int masterSeed, int floor)
+{
+    unchecked
+    {
+        uint h = (uint)masterSeed;
+        h ^= (uint)floor * 0x9E3779B9u;
+        h ^= h >> 16; h *= 0x85EBCA6Bu;
+        h ^= h >> 13; h *= 0xC2B2AE35u;
+        h ^= h >> 16;
+        return (int)h;
+    }
+}
+
+private DungeonData PickDataBySeed(int seed)
+{
+    int n = listDungeonsData.Count;
+    return listDungeonsData[(int)(((long)seed % n + n) % n)];
+}
+
+private void PlacePlayerAtStart()
+{
+    if (player == null) { Debug.LogWarning("Chưa gán player"); return; }
+
+    DungeonRoom start = dungeon.startRoom;
+    if (start == null && dungeon.rooms.Count > 0) start = dungeon.rooms[0];
+    if (start == null) return;
+
+    Vector2Int c = (start.InnerMin + start.InnerMax) / 2;
+    Vector3 pos = new Vector3(c.x * tileSize, playerSpawnY, c.y * tileSize);
+
+    var ui = player.GetComponent<PlayerUI>();
+    if (ui != null) ui.currentGate = null;   // bỏ tham chiếu gate của tầng cũ
+
+    var pt = player.GetComponent<PlayerTest>();
+    if (pt != null) pt.Teleport(pos);
+    else player.transform.position = pos;
+}
+
+private void SpawnPortal(DungeonRoom room)
+{
+    portalSpawned = true;
+
+    Vector2Int c = (room.InnerMin + room.InnerMax) / 2;
+    Vector3 pos = new Vector3(c.x * tileSize, portalY, c.y * tileSize);
+
+    GameObject prefab = dungeon.dungeonData.portal;
+    
+    GameObject go;
+    if (prefab != null)
+    {
+        go = Instantiate(prefab, pos, Quaternion.identity, dungeonRenderer.Root);
+    }
+    else
+    {
+        Debug.LogWarning("DungeonData.portal chưa gán => dùng portal tạm");
+        go = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        go.transform.SetParent(dungeonRenderer.Root, false);
+        go.transform.position = pos;
+        go.transform.localScale = new Vector3(2f, 1f, 2f);
+        go.GetComponent<Collider>().isTrigger = true;
+        go.AddComponent<Portal>();
+    }
+    go.name = "Portal_NextFloor";
+}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     private DungeonRenderConfig BuildRenderConfig()
     {
         return new DungeonRenderConfig
@@ -168,7 +270,7 @@ public class DungeonManagers : MonoBehaviour
         }
         if (room.roomType == RoomType.Boss)
         {
-            GameObject boss = dungeon.dungeonData.Boss;
+            GameObject boss = dungeon.dungeonData.Boss;p
             if (boss == null) return;
             Vector2 c = (Vector2)(room.InnerMin + room.InnerMax) * 0.5f;
             var b = Instantiate(boss, new Vector3(c.x * tileSize, 0f, c.y * tileSize),

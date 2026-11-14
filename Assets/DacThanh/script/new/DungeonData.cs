@@ -15,6 +15,7 @@ public class DungeonData : ScriptableObject
     [Header("Dungeon brick")]
     public bool randomSeed = true;
     public int seed;
+    public GameObject portal;
     public List<FloorPrefab> Floors;      // pivot ở giữa, kích thước 1 ô
     public GameObject wall;       // pivot ở giữa, kích thước 1 ô
     public List<CorridorPrefab> Corridor;   // pivot ở giữa, kích thước 1 ô
@@ -24,7 +25,6 @@ public class DungeonData : ScriptableObject
     [Header("Monster")]
     public List<MonsterPrefab> monster;
     public GameObject Boss;
-   
     public List<Others> others;
 }
 
