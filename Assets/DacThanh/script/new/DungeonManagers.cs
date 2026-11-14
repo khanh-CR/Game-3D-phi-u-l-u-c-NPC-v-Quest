@@ -270,7 +270,7 @@ private void SpawnPortal(DungeonRoom room)
         }
         if (room.roomType == RoomType.Boss)
         {
-            GameObject boss = dungeon.dungeonData.Boss;p
+            GameObject boss = dungeon.dungeonData.Boss;
             if (boss == null) return;
             Vector2 c = (Vector2)(room.InnerMin + room.InnerMax) * 0.5f;
             var b = Instantiate(boss, new Vector3(c.x * tileSize, 0f, c.y * tileSize),
