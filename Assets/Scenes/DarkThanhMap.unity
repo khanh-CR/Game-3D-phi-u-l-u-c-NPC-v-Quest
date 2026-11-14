@@ -1511,6 +1511,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 440202097}
   m_CullTransparentMesh: 1
+--- !u!1 &478322525
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 478322526}
+  m_Layer: 0
+  m_Name: GameObject (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &478322526
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478322525}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &507833637
 GameObject:
   m_ObjectHideFlags: 0
@@ -4119,6 +4150,9 @@ MonoBehaviour:
   player: {fileID: 0}
   MasterSeed: 2
   randomSeed: 1
+  currentFloor: 1
+  playerSpawnY: 0.5
+  portalY: 1
   listDungeonsData:
   - {fileID: 11400000, guid: ee0f3e048b0c2c145823cc6f1a9cd381, type: 2}
   data: {fileID: 11400000, guid: ee0f3e048b0c2c145823cc6f1a9cd381, type: 2}
@@ -4146,6 +4180,7 @@ MonoBehaviour:
       roomPadding: 0
       gates: []
       NavMeshRoom: {fileID: 0}
+      playerInside: 0
     endRoom:
       idRoom: 0
       wave: 0
@@ -4157,6 +4192,7 @@ MonoBehaviour:
       roomPadding: 0
       gates: []
       NavMeshRoom: {fileID: 0}
+      playerInside: 0
     rooms: []
   dungeonRooms: []
   minMonster: 7
@@ -5523,63 +5559,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 88acc181dbea381469fee5517eb35458, type: 3}
---- !u!1001 &1172571154951910890
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3855640810853562332, guid: 9c5dc25b39bc89a4f9b0cb6d2283b85a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -7.363497
-      objectReference: {fileID: 0}
-    - target: {fileID: 3855640810853562332, guid: 9c5dc25b39bc89a4f9b0cb6d2283b85a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.85228324
-      objectReference: {fileID: 0}
-    - target: {fileID: 3855640810853562332, guid: 9c5dc25b39bc89a4f9b0cb6d2283b85a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.6481819
-      objectReference: {fileID: 0}
-    - target: {fileID: 3855640810853562332, guid: 9c5dc25b39bc89a4f9b0cb6d2283b85a, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071067
-      objectReference: {fileID: 0}
-    - target: {fileID: 3855640810853562332, guid: 9c5dc25b39bc89a4f9b0cb6d2283b85a, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 3855640810853562332, guid: 9c5dc25b39bc89a4f9b0cb6d2283b85a, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3855640810853562332, guid: 9c5dc25b39bc89a4f9b0cb6d2283b85a, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3855640810853562332, guid: 9c5dc25b39bc89a4f9b0cb6d2283b85a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3855640810853562332, guid: 9c5dc25b39bc89a4f9b0cb6d2283b85a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3855640810853562332, guid: 9c5dc25b39bc89a4f9b0cb6d2283b85a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5130197785815031052, guid: 9c5dc25b39bc89a4f9b0cb6d2283b85a, type: 3}
-      propertyPath: m_Name
-      value: bone (1)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 9c5dc25b39bc89a4f9b0cb6d2283b85a, type: 3}
 --- !u!1001 &1830178268946594768
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5835,10 +5814,10 @@ SceneRoots:
   - {fileID: 1742445736}
   - {fileID: 1360974173}
   - {fileID: 1830178268946594768}
+  - {fileID: 478322526}
   - {fileID: 1437859480}
   - {fileID: 1319360861}
   - {fileID: 6494794205633799212}
   - {fileID: 2224688227782816713}
   - {fileID: 2741737538211603612}
   - {fileID: 1016607308653016602}
-  - {fileID: 1172571154951910890}

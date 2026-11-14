@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: DungeonData
   m_EditorClassIdentifier: Assembly-CSharp::DungeonData
   dungeonWorld: 0
-  level: 4
-  randomSeed: 1
+  level: 2
+  randomSeed: 0
   seed: 2
+  portal: {fileID: 5693000830361015419, guid: 0ea11fee711384f479b5a509a0309a68, type: 3}
   Floors:
   - prefab: {fileID: 9186243745350663760, guid: fe85e38c374089c4786f1340a7a30f99, type: 3}
     Rate: 1
@@ -32,12 +33,24 @@ MonoBehaviour:
   Gate: {fileID: 6064086913357960400, guid: 52c4aba4ffa479d4a93f779017012f03, type: 3}
   Decor:
   - prefab: {fileID: 5130197785815031052, guid: 9c5dc25b39bc89a4f9b0cb6d2283b85a, type: 3}
-    Rate: 2
+    Rate: 20
+  - prefab: {fileID: 9146756403017983809, guid: 06a4b5b231f9b854daca93c0b0283a1c, type: 3}
+    Rate: 20
+  - prefab: {fileID: 4008491047878214571, guid: f0bae36a1ec12cc4dacf4fcd1f330f42, type: 3}
+    Rate: 10
+  - prefab: {fileID: 7047419166506345823, guid: 141e80e729ae0154caac366c1ba57fc9, type: 3}
+    Rate: 10
+  - prefab: {fileID: 3736908263322117048, guid: 8ec461e250ad612428ecc0db393411fe, type: 3}
+    Rate: 5
+  - prefab: {fileID: 5732429530359019626, guid: 660e7df7daf8e1344997ff3b3fc8cb42, type: 3}
+    Rate: 12
+  - prefab: {fileID: 1824830879978070098, guid: 9e26e9833b4d7c748be1335d3f898291, type: 3}
+    Rate: 12
   roof: {fileID: 0}
   monster:
   - prefab: {fileID: 2476040182585028684, guid: 88acc181dbea381469fee5517eb35458, type: 3}
     Rate: 1
-  Boss: {fileID: 0}
+  Boss: {fileID: 2664531143061349541, guid: eb6cf6d7bf37a7d479020038a1601fb7, type: 3}
   others:
   - prefab: {fileID: 5200053343832838858, guid: 8fb406151949de54fbb2371b52f9cde6, type: 3}
     Rate: 2
