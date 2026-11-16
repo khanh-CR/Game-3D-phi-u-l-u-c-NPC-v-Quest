@@ -10,19 +10,23 @@ public enum DungeonWorld
 [CreateAssetMenu(fileName = "DungeonData", menuName = "Dungeon/Dungeon Data")]
 public class DungeonData : ScriptableObject
 {
+    [Header("Dungeon attibutes")]
     public DungeonWorld dungeonWorld = DungeonWorld.jungle;
     public int level = 1;
-    [Header("Dungeon brick")]
     public bool randomSeed = true;
     public int seed;
+    public int maxFloor;
+    
+    [Header("Dungeon brick")]
     public GameObject portal;
-    public List<FloorPrefab> Floors;      // pivot ở giữa, kích thước 1 ô
-    public GameObject wall;       // pivot ở giữa, kích thước 1 ô
-    public List<CorridorPrefab> Corridor;   // pivot ở giữa, kích thước 1 ô
-    public GameObject Gate;       // pivot Ở ĐÁY, cao 2 ô
+    public List<FloorPrefab> Floors;     
+    public GameObject wall;       
+    public List<CorridorPrefab> Corridor;   
+    public GameObject Gate;       
     public List<DecorPrefab> Decor;
-    public GameObject roof;   
-    [Header("Monster")]
+    public GameObject roof; 
+    
+    [Header("Dungeon monster")]
     public List<MonsterPrefab> monster;
     public GameObject Boss;
     public List<Others> others;

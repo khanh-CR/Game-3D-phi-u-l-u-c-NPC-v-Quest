@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
-
+using UnityEngine.SceneManagement;
 public class DungeonManagers : MonoBehaviour
 {
     #region Attibute
@@ -70,6 +70,8 @@ public class DungeonManagers : MonoBehaviour
     #region BuildDungeon
     public void CreateDungeon(DungeonData data)
     {
+        runData = data;
+
         if (data == null)
         {
             if (randomSeed) MasterSeed = Random.Range(int.MinValue, int.MaxValue);
@@ -78,41 +80,45 @@ public class DungeonManagers : MonoBehaviour
                 Debug.LogError("DungeonData null file:DungeonManagers");
                 return;
             }
-            // Chọn data theo seed để cùng seed luôn cùng giao diện
-            int index = (int)(((long)MasterSeed % listDungeonsData.Count + listDungeonsData.Count) % listDungeonsData.Count);
-            data = listDungeonsData[index];
-
         }
         else
         {
-            if (data.randomSeed)
-                MasterSeed = Random.Range(int.MinValue, int.MaxValue);
-            else
-                MasterSeed = data.seed;
+            MasterSeed = data.randomSeed ? Random.Range(int.MinValue, int.MaxValue) : data.seed;
             Level = data.level;
         }
+
         wallHeight = Mathf.Max(1, wallHeight);
-        ClearTile();
-        dungeon = new Dungeon(MasterSeed, Level, data);
-        dungeonRooms = dungeon.rooms;
-        SortDungeonRooms();
-        // Dữ liệu (Dungeon) và phần dựng ra scene (RenderDungeon) tách riêng
-        dungeonRenderer = new RenderDungeon(dungeon, BuildRenderConfig());
-        dungeonRenderer.Render();   
-        
+        runLevel = Level;
+        currentFloor = 1;
+        Debug.Log($"Run seed: {MasterSeed}, maxFloor: {GetMaxFloor()}");
+        BuildFloor();
     }
     public void NextFloor()
     {
+        if (currentFloor + 1 > GetMaxFloor())
+        {
+            ReturnToLobby();
+            return;
+        }
+
         currentFloor++;
-        // Muốn tầng sâu hơn thì khó hơn: Level = Mathf.Min(runLevel + (currentFloor - 1) / 2, 7);
         BuildFloor();
+    }
+    private int GetMaxFloor()
+    {
+        DungeonData d = runData != null ? runData : PickDataBySeed(GetFloorSeed(MasterSeed, 1));
+
+        if (d.randomSeed)
+            return new System.Random(GetFloorSeed(MasterSeed, 0)).Next(1, 5);
+
+        return Mathf.Max(1, d.maxFloor);
     }
     private void BuildFloor()
     {
         int floorSeed = GetFloorSeed(MasterSeed, currentFloor);
         DungeonData floorData = runData != null ? runData : PickDataBySeed(floorSeed);
 
-        ClearTile();              // xoá tầng cũ (kể cả quái, cổng cũ vì đều nằm dưới Root)
+        ClearTile();              
         activeRoom = null;
         portalSpawned = false;
 
@@ -125,7 +131,6 @@ public class DungeonManagers : MonoBehaviour
 
         PlacePlayerAtStart();
     }
-    // Hash xác định (không dùng System.HashCode vì nó khác nhau mỗi lần chạy)
 private static int GetFloorSeed(int masterSeed, int floor)
 {
     unchecked
@@ -137,6 +142,17 @@ private static int GetFloorSeed(int masterSeed, int floor)
         h ^= h >> 16;
         return (int)h;
     }
+}
+private void ReturnToLobby()
+{
+    ClearTile();
+    activeRoom = null;
+
+    // Player đã được DontDestroyOnLoad (bởi Tele). Scene lobby load lại sẽ có player riêng,
+    // nên huỷ bản này để không bị trùng 2 player.
+    if (player != null) Destroy(player);
+
+    SceneManager.LoadScene(0);
 }
 
 private DungeonData PickDataBySeed(int seed)
