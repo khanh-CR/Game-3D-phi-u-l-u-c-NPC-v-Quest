@@ -2364,6 +2364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04e82d70b7d9f49429eb6e5a0dabf870, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  data: {fileID: 0}
   atk: 0
   def: 0
   hp: 0
@@ -10877,6 +10878,10 @@ PrefabInstance:
       propertyPath: def
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: 3e80cddfbcb298a4a85c07586e433294, type: 2}
     - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
       propertyPath: skillInput
       value: 

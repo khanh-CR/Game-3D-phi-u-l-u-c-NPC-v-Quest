@@ -16,7 +16,7 @@ MonoBehaviour:
   level: 2
   randomSeed: 0
   seed: 2
-  maxFloor: 0
+  maxFloor: 2
   portal: {fileID: 5693000830361015419, guid: 0ea11fee711384f479b5a509a0309a68, type: 3}
   Floors:
   - prefab: {fileID: 9186243745350663760, guid: fe85e38c374089c4786f1340a7a30f99, type: 3}
