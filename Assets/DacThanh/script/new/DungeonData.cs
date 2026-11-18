@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+    using System.Collections.Generic;
 using UnityEngine;
 
 public enum DungeonWorld
@@ -10,19 +10,26 @@ public enum DungeonWorld
 [CreateAssetMenu(fileName = "DungeonData", menuName = "Dungeon/Dungeon Data")]
 public class DungeonData : ScriptableObject
 {
+    [Header("Dungeon attibutes")]
     public DungeonWorld dungeonWorld = DungeonWorld.jungle;
-
+    public int level = 1;
+    public bool randomSeed = true;
+    public int seed;
+    public int maxFloor;
+    
     [Header("Dungeon brick")]
-    public List<FloorPrefab> Floors;      // pivot ở giữa, kích thước 1 ô
-    public GameObject wall;       // pivot ở giữa, kích thước 1 ô
-    public List<CorridorPrefab> Corridor;   // pivot ở giữa, kích thước 1 ô
-    public GameObject Gate;       // pivot Ở ĐÁY, cao 2 ô
+    public GameObject portal;
+    public List<FloorPrefab> Floors;     
+    public GameObject wall;       
+    public List<CorridorPrefab> Corridor;   
+    public GameObject Gate;       
     public List<DecorPrefab> Decor;
-    public GameObject roof;   
-    [Header("Monster")]
+    public GameObject roof; 
+    
+    [Header("Dungeon monster")]
     public List<MonsterPrefab> monster;
     public GameObject Boss;
-    public GameObject NPC;
+    public List<Others> others;
 }
 
 [System.Serializable]
@@ -45,6 +52,12 @@ public class CorridorPrefab
 }
 [System.Serializable]
 public class MonsterPrefab
+{
+    public GameObject prefab;
+    public int Rate = 1;
+}
+[System.Serializable]
+public class Others
 {
     public GameObject prefab;
     public int Rate = 1;

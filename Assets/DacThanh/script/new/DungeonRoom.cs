@@ -21,8 +21,16 @@ public class DungeonRoom
         spawnPosition.y + size.y - 1);
     public int Width => size.x;
     public int Height => size.y;
-    public List<GameObject> Monster;
-    public List<GameObject> Gate;
+    [Header("Room battle information")]
+    public int wave = 0;
+    public const int NormalMaxWave = 4;
+    public const int BossMaxWave = 1;  
+    public int MaxWave => roomType == RoomType.Boss ? BossMaxWave : NormalMaxWave;
+    public bool HasWaves => roomType == RoomType.Normal || roomType == RoomType.Boss;
+    public List<GameObject> Monster = new List<GameObject>();
+    
+    
+    public List<GameObject> Gate = new List<GameObject>();
     [Header( " thông tin tọa độ sàn")]
     public Vector2Int InnerMin => Min + Vector2Int.one;
     public Vector2Int InnerMax => Max - Vector2Int.one;
@@ -87,6 +95,30 @@ public class DungeonRoom
                 Vector2Int position = new Vector2Int(x, y);
                 roomTiles.Add(position, new DungeonTile(type, position));
             }
+        }
+    }
+
+    public bool CheckRoomWave()
+    {
+        if (!HasWaves) return false;
+        if (wave >= MaxWave) return false;
+
+        Monster.RemoveAll(m => m == null);
+        if (Monster.Count > 0) return false;
+        wave++;
+        return true;
+    }
+
+    public bool playerInside = false;
+
+// Phòng không phải Normal thì luôn cho ra. Normal: xong đủ 4 wave và hết quái.
+    public bool IsCleared
+    {
+        get
+        {
+            if (!HasWaves) return true;
+            Monster.RemoveAll(m => m == null);
+            return wave >= MaxWave && Monster.Count == 0;
         }
     }
 }

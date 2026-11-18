@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.Cinemachine;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
@@ -14,7 +15,6 @@ public class TopDownPlayerController : MonoBehaviour
 
     [Header("References")]
     public Camera mainCamera;
-
     private CharacterController controller;
     private Animator animator;
 

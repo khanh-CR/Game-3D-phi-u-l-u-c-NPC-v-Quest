@@ -1,37 +1,42 @@
 using System;
 using System.Collections.Generic;
-using Unity.AI.Navigation;
 using UnityEngine;
 using Random = UnityEngine.Random;
-
+using UnityEngine.SceneManagement;
 public class DungeonManagers : MonoBehaviour
 {
     #region Attibute
+
+    public GameObject player;
     public static DungeonManagers instance;
     [Header("Seed")]
     public int MasterSeed;
     public bool randomSeed = true;
-
+    [Header("Floor")]
+    public int currentFloor = 1;
+    [SerializeField] float playerSpawnY = 0.5f;   // chỉnh theo chiều cao sàn/pivot player
+    [SerializeField] float portalY = 1f;
+    private DungeonData runData;     // data cố định của run (null => chọn theo seed từng tầng)
+    private int runLevel;
+    private bool portalSpawned;
     [Header("Dungeon")]
     [SerializeField] List<DungeonData> listDungeonsData;
+    public DungeonData data;
     [SerializeField] int Level = 1;
     [SerializeField] int wallHeight = 5;     // số block tường theo trục Y (mặc định 5)
-    [SerializeField] float tileSize = 1f;
+    private const float tileSize = 1f;
     [SerializeField] bool generateOnStart = false;
-    private const int GateHeight = 2;        // gate cao 2 ô
     [Header("Light")]
     [SerializeField] float lightHeight = 3f;      // độ cao đèn (tính theo ô, từ mặt sàn)
     [SerializeField] float lightRange = 15f;
     [SerializeField] float lightIntensity = 2f;
     [SerializeField] Color lightColor = Color.white;
-    
-    
 
-    private Dungeon dungeon;
+    public Dungeon dungeon;
     public List<DungeonRoom> dungeonRooms;
-    private Transform dungeonRoot;
-    private System.Random renderRandom;
+    private RenderDungeon dungeonRenderer;
     #endregion
+
     private void Awake()
     {
         instance = this;
@@ -41,252 +46,206 @@ public class DungeonManagers : MonoBehaviour
     {
         if (generateOnStart) DungeonGenerator();
     }
+    private DungeonRoom activeRoom;
+
+    public void EnterRoom(DungeonRoom room) => activeRoom = room;
+    public void ExitRoom(DungeonRoom room) { if (activeRoom == room) activeRoom = null; }
+    private void Update()
+    {
+        if (activeRoom == null) return;
+        // CheckRoomWave chỉ trả true khi hết quái và wave < MaxWave => spawn wave kế
+        if (activeRoom.CheckRoomWave()) SpawnMonstersInRoom(activeRoom);
+        if (!portalSpawned && activeRoom.roomType == RoomType.Boss && activeRoom.IsCleared)
+            SpawnPortal(activeRoom);
+    }
+
     [ContextMenu("Generate Dungeon")]
     public void DungeonGenerator()
     {
         if (randomSeed)
             MasterSeed = Random.Range(int.MinValue, int.MaxValue);
 
-        CreateDungeon(MasterSeed);
+        CreateDungeon(data);
     }
-    public void CreateDungeon(int seed)
+    #region BuildDungeon
+    public void CreateDungeon(DungeonData data)
     {
-        CreateDungeon(seed, wallHeight);
-    }
-    public void CreateDungeon(int seed, int height)
-    {
-        if (listDungeonsData == null || listDungeonsData.Count == 0)
-        {
-            Debug.LogError("DungeonData null file:DungeonManagers");
-            return;
-        }
+        runData = data;
 
-        MasterSeed = seed;
-        wallHeight = Mathf.Max(1, height);
-
-        // Chọn data theo seed để cùng seed luôn cùng giao diện
-        int index = (int)(((long)seed % listDungeonsData.Count + listDungeonsData.Count) % listDungeonsData.Count);
-        DungeonData data = listDungeonsData[index];
-
-        ClearTile();
-        dungeon = new Dungeon(seed, Level, data);
-        dungeonRooms = dungeon.rooms;
-        renderRandom = new System.Random(dungeon.Seed);
-        RenderDungeon();
-    }
-    #region Build_Dungeon
-    private void RenderDungeon()
-    {
-        if (dungeon == null)
-        {
-            Debug.LogError("Dungeon null file:DungeonManagers");
-            return;
-        }
-
-        DungeonData data = dungeon.dungeonData;
         if (data == null)
         {
-            Debug.LogError("DungeonData null file:DungeonManagers");
+            if (randomSeed) MasterSeed = Random.Range(int.MinValue, int.MaxValue);
+            if (listDungeonsData == null || listDungeonsData.Count == 0)
+            {
+                Debug.LogError("DungeonData null file:DungeonManagers");
+                return;
+            }
+        }
+        else
+        {
+            MasterSeed = data.randomSeed ? Random.Range(int.MinValue, int.MaxValue) : data.seed;
+            Level = data.level;
+        }
+
+        wallHeight = Mathf.Max(1, wallHeight);
+        runLevel = Level;
+        currentFloor = 1;
+        Debug.Log($"Run seed: {MasterSeed}, maxFloor: {GetMaxFloor()}");
+        BuildFloor();
+    }
+    public void NextFloor()
+    {
+        if (currentFloor + 1 > GetMaxFloor())
+        {
+            ReturnToLobby();
             return;
         }
 
-        // Dungeon luôn spawn tại (0, 0, 0)
-        dungeonRoot = new GameObject("Dungeon").transform;
-        dungeonRoot.position = Vector3.zero;
+        currentFloor++;
+        BuildFloor();
+    }
+    private int GetMaxFloor()
+    {
+        DungeonData d = runData != null ? runData : PickDataBySeed(GetFloorSeed(MasterSeed, 1));
 
-        foreach (DungeonTile tile in dungeon.dungeonTiles.Values)
+        if (d.randomSeed)
+            return new System.Random(GetFloorSeed(MasterSeed, 0)).Next(1, 5);
+
+        return Mathf.Max(1, d.maxFloor);
+    }
+    private void BuildFloor()
+    {
+        int floorSeed = GetFloorSeed(MasterSeed, currentFloor);
+        DungeonData floorData = runData != null ? runData : PickDataBySeed(floorSeed);
+
+        ClearTile();              
+        activeRoom = null;
+        portalSpawned = false;
+
+        dungeon = new Dungeon(floorSeed, Level, floorData);
+        dungeonRooms = dungeon.rooms;
+        SortDungeonRooms();
+
+        dungeonRenderer = new RenderDungeon(dungeon, BuildRenderConfig());
+        dungeonRenderer.Render();
+
+        PlacePlayerAtStart();
+    }
+private static int GetFloorSeed(int masterSeed, int floor)
+{
+    unchecked
+    {
+        uint h = (uint)masterSeed;
+        h ^= (uint)floor * 0x9E3779B9u;
+        h ^= h >> 16; h *= 0x85EBCA6Bu;
+        h ^= h >> 13; h *= 0xC2B2AE35u;
+        h ^= h >> 16;
+        return (int)h;
+    }
+}
+private void ReturnToLobby()
+{
+    ClearTile();
+    activeRoom = null;
+
+    // Player đã được DontDestroyOnLoad (bởi Tele). Scene lobby load lại sẽ có player riêng,
+    // nên huỷ bản này để không bị trùng 2 player.
+    if (player != null) Destroy(player);
+
+    SceneManager.LoadScene(0);
+}
+
+private DungeonData PickDataBySeed(int seed)
+{
+    int n = listDungeonsData.Count;
+    return listDungeonsData[(int)(((long)seed % n + n) % n)];
+}
+
+private void PlacePlayerAtStart()
+{
+    if (player == null) { Debug.LogWarning("Chưa gán player"); return; }
+
+    DungeonRoom start = dungeon.startRoom;
+    if (start == null && dungeon.rooms.Count > 0) start = dungeon.rooms[0];
+    if (start == null) return;
+
+    Vector2Int c = (start.InnerMin + start.InnerMax) / 2;
+    Vector3 pos = new Vector3(c.x * tileSize, playerSpawnY, c.y * tileSize);
+
+    var ui = player.GetComponent<PlayerUI>();
+    if (ui != null) ui.currentGate = null;   // bỏ tham chiếu gate của tầng cũ
+
+    var pt = player.GetComponent<PlayerTest>();
+    if (pt != null) pt.Teleport(pos);
+    else player.transform.position = pos;
+}
+
+private void SpawnPortal(DungeonRoom room)
+{
+    portalSpawned = true;
+
+    Vector2Int c = (room.InnerMin + room.InnerMax) / 2;
+    Vector3 pos = new Vector3(c.x * tileSize, portalY, c.y * tileSize);
+
+    GameObject prefab = dungeon.dungeonData.portal;
+    
+    GameObject go;
+    if (prefab != null)
+    {
+        go = Instantiate(prefab, pos, Quaternion.identity, dungeonRenderer.Root);
+    }
+    else
+    {
+        Debug.LogWarning("DungeonData.portal chưa gán => dùng portal tạm");
+        go = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        go.transform.SetParent(dungeonRenderer.Root, false);
+        go.transform.position = pos;
+        go.transform.localScale = new Vector3(2f, 1f, 2f);
+        go.GetComponent<Collider>().isTrigger = true;
+        go.AddComponent<Portal>();
+    }
+    go.name = "Portal_NextFloor";
+}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    private DungeonRenderConfig BuildRenderConfig()
+    {
+        return new DungeonRenderConfig
         {
-            // tile.x -> world x, tile.y -> world z, chiều cao là y
-            Vector3 basePos = new Vector3(
-                tile.Position.x * tileSize,
-                0f,
-                tile.Position.y * tileSize);
-
-            switch (tile.Type)
-            {
-                case DungeonTileType.Floor:
-                    SpawnFloor(GetPrefab(data.Floors,w => w.prefab, w => w.Rate), basePos);
-                    break;
-
-                case DungeonTileType.Corridor:
-                    SpawnFloor(GetPrefab(data.Corridor,w => w.prefab, w => w.Rate), basePos);
-                    break;
-
-                case DungeonTileType.Wall:
-                    SpawnWallColumn(data.wall, basePos, 0);
-                    break;
-
-                case DungeonTileType.Gate:
-                    SpawnFloor(GetPrefab(data.Floors,w => w.prefab, w => w.Rate), basePos);// nền dưới gate
-                    SpawnGate(data.Gate, tile.Position, basePos+ new Vector3(0,0.5f,0));
-                    SpawnWallColumn(data.wall, basePos, GateHeight);    // tường phía trên gate
-                    break;
-
-                // Empty: không render
-            }
-        }
-        BuildRoomNavMeshes();
-        // SpawnRoof(data);
-        SpawnRoomLights();
+            wallHeight = wallHeight,
+            tileSize = tileSize,
+            lightHeight = lightHeight,
+            lightRange = lightRange,
+            lightIntensity = lightIntensity,
+            lightColor = lightColor
+        };
     }
 
-    // Mặt trên của sàn nằm ở y = 0
-    private void SpawnFloor(GameObject prefab, Vector3 basePos)
-    {
-        if (prefab == null) return;
-
-        Instantiate(prefab,
-                    basePos + Vector3.down * (tileSize * 0.5f),
-                    Quaternion.identity,
-                    dungeonRoot);
-    }
-
-    // Xếp block từ tầng startLevel đến wallHeight - 1
-    private void SpawnWallColumn(GameObject prefab, Vector3 basePos, int startLevel)
-    {
-        if (prefab == null) return;
-
-        for (int i = startLevel; i < wallHeight; i++)
-        {
-            Vector3 pos = basePos + Vector3.up * ((i + 0.5f) * tileSize);
-            Instantiate(prefab, pos, Quaternion.identity, dungeonRoot);
-        }
-    }
-// Mái phủ toàn bộ dungeon, nằm ngay trên đỉnh tường (tầng chỉ số = wallHeight)
-    private void SpawnRoof(DungeonData data)
-    {
-        if (data.roof == null) return;
-
-        // Gom mái dưới 1 object riêng cho gọn Hierarchy
-        Transform roofRoot = new GameObject("Roof").transform;
-        roofRoot.SetParent(dungeonRoot, false);
-
-        RectInt b = dungeon.Bounds;
-        float y = (wallHeight + 0.5f) * tileSize;
-
-        for (int x = b.xMin; x < b.xMax; x++)
-        {
-            for (int z = b.yMin; z < b.yMax; z++)
-            {
-                Vector3 pos = new Vector3(x * tileSize, y, z * tileSize);
-                Instantiate(data.roof, pos, Quaternion.identity, roofRoot);
-            }
-        }
-    }
-    // Mỗi room 1 đèn ở giữa phòng
-    private void SpawnRoomLights()
-    {
-        foreach (DungeonRoom room in dungeon.rooms)
-        {
-            // Tâm vùng sàn (tính theo tile) -> world
-            Vector2 center = (Vector2)(room.InnerMin + room.InnerMax) * 0.5f;
-
-            GameObject go = new GameObject($"Light_Room_{room.idRoom}");
-            go.transform.SetParent(dungeonRoot, false);
-            go.transform.position = new Vector3(
-                center.x * tileSize,
-                lightHeight * tileSize,
-                center.y * tileSize);
-
-            Light l = go.AddComponent<Light>();
-            l.type = LightType.Point;
-            l.range = lightRange;
-            l.intensity = lightIntensity;
-            l.color = lightColor;
-        }
-    }
-    private void SpawnGate(GameObject prefab, Vector2Int tilePos, Vector3 basePos)
-    {
-        if (prefab == null) return;
-
-        // Gate nằm trên tường chạy theo trục X (trái + phải đều là Wall)
-        // thì mặt gate hướng theo Z, ngược lại xoay 90 độ
-        // bool wallAlongX = IsWall(tilePos + Vector2Int.left) && IsWall(tilePos + Vector2Int.right);
-        bool wallAlongX = IsWalkable(tilePos + Vector2Int.up) ||
-                          IsWalkable(tilePos + Vector2Int.down);
-
-        Quaternion rot = wallAlongX ? Quaternion.identity : Quaternion.Euler(0f, 90f, 0f);
-
-        Instantiate(prefab, basePos, rot, dungeonRoot);
-    }
-    private bool IsWalkable(Vector2Int p)
-    {
-        return dungeon.dungeonTiles.TryGetValue(p, out DungeonTile t) && t.IsWalkable;
-    }
-    private void BuildRoomNavMeshes()
-    {
-        foreach (DungeonRoom room in dungeon.rooms)
-        {
-            // Chỉ Normal và Boss
-            if (room.roomType != RoomType.Normal &&
-                room.roomType != RoomType.Boss) continue;
-
-            // Tâm vùng sàn (tính theo tile), đổi sang world
-            Vector2 center = (Vector2)(room.InnerMin + room.InnerMax) * 0.5f;
-
-            GameObject go = new GameObject($"NavMesh_Room_{room.idRoom}");
-            go.transform.SetParent(dungeonRoot, false);
-            go.transform.position = new Vector3(
-                center.x * tileSize,
-                0f,
-                center.y * tileSize);
-            room.NavMeshRoom = go;
-            NavMeshSurface surface = go.AddComponent<NavMeshSurface>();
-            surface.collectObjects = CollectObjects.Volume;
-            surface.center = Vector3.zero;
-            surface.size = new Vector3(
-                room.InnerSize.x * tileSize - 0.1f,   // trừ nhỏ để không dính mesh tường sát mép
-                2f,                                    // cao 2: phủ sàn (y từ -1 đến 0) và một chút phía trên
-                room.InnerSize.y * tileSize - 0.1f);
-
-            surface.BuildNavMesh();
-        }
-    }
-
-    private bool IsWall(Vector2Int p)
-    {
-        return dungeon.dungeonTiles.TryGetValue(p, out DungeonTile t) &&
-               t.Type == DungeonTileType.Wall;
-    }
-    private GameObject GetPrefab<T>(List<T> list,
-        System.Func<T, GameObject> getPrefab,
-        System.Func<T, int> getRate)
-    {
-        if (list == null || list.Count == 0) return null;
-
-        int total = 0;
-        foreach (T item in list)
-            if (getPrefab(item) != null && getRate(item) > 0)
-                total += getRate(item);
-
-        if (total <= 0) return null;
-
-        int roll = renderRandom.Next(total);
-        foreach (T item in list)
-        {
-            int rate = getRate(item);
-            if (getPrefab(item) == null || rate <= 0) continue;
-            if (roll < rate) return getPrefab(item);
-            roll -= rate;
-        }
-        return null;
-    }
-    #endregion
     public void ClearTile()
     {
-        if (dungeonRoot == null) return;
+        if (dungeonRenderer == null) return;
 
-        if (Application.isPlaying) Destroy(dungeonRoot.gameObject);
-        else DestroyImmediate(dungeonRoot.gameObject);
-
-        dungeonRoot = null;
+        dungeonRenderer.Clear();
+        dungeonRenderer = null;
     }
+    #endregion
+
     #region Get,Set_dungeon 
     public DungeonRoom GetRoomById(int id)
     {
         if (!dungeon.TryGetRoom(id, out DungeonRoom room)) return null;
-        return room; 
+        return room;
     }
+
     public Vector3? GetPosOfRoomId(int roomId, int localX, int localY)
     {
         if (GetRoomById(roomId) == null)
@@ -305,4 +264,84 @@ public class DungeonManagers : MonoBehaviour
         return world;
     }
     #endregion
+    [Header("Monster")]
+    [SerializeField] int minMonster = 7;
+    [SerializeField] int maxMonster = 10;   // bao gồm cả 10
+    [SerializeField] int monsterEdgeMargin = 1; // chừa N ô sát tường, tránh quái dính tường/gate
+    public void SpawnMonstersInRoom(DungeonRoom room)
+    {
+        // DungeonRoom room = GetRoomById(roomId);
+        List<MonsterPrefab> list = dungeon.dungeonData.monster;
+        if (room == null || list == null || list.Count == 0) return;
+
+        // Các ô sàn trong room, xáo trộn => lấy từ đầu là không trùng vị trí
+        List<Vector2Int> tiles = new List<Vector2Int>();
+        foreach (DungeonTile t in room.roomTiles.Values)
+            if (t.Type == DungeonTileType.Floor) tiles.Add(t.Position);
+
+        for (int i = tiles.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            (tiles[i], tiles[j]) = (tiles[j], tiles[i]);
+        }
+        if (room.roomType == RoomType.Boss)
+        {
+            GameObject boss = dungeon.dungeonData.Boss;
+            if (boss == null) return;
+            Vector2 c = (Vector2)(room.InnerMin + room.InnerMax) * 0.5f;
+            var b = Instantiate(boss, new Vector3(c.x * tileSize, 0f, c.y * tileSize),
+                Quaternion.identity, dungeonRenderer.Root);
+            room.Monster.Add(b);
+            return;
+        }
+        int count = Mathf.Min(Random.Range(minMonster, maxMonster + 1), tiles.Count);
+        // int count = Mathf.Min(Random.Range(1, 2), tiles.Count);   // 7-10 con
+
+        // Tổng rate
+        int total = 0;
+        foreach (MonsterPrefab m in list)
+            if (m.prefab != null && m.Rate > 0) total += m.Rate;
+        if (total <= 0) return;
+
+        for (int i = 0; i < count; i++)
+        {
+            // Chọn prefab theo rate
+            int roll = Random.Range(0, total);
+            GameObject prefab = null;
+            foreach (MonsterPrefab m in list)
+            {
+                if (m.prefab == null || m.Rate <= 0) continue;
+                if (roll < m.Rate) { prefab = m.prefab; break; }
+                roll -= m.Rate;
+            }
+
+            Vector3 pos = new Vector3(tiles[i].x * tileSize, 0f, tiles[i].y * tileSize);
+            var enemyObj = Instantiate(prefab, pos, Quaternion.identity, dungeonRenderer.Root);
+            room.Monster.Add(enemyObj);
+        }
+    }
+
+    public void SpawnObjectInRoomById(int roomId, GameObject gameObject, int localX, int localY)
+    {
+        DungeonRoom room = GetRoomById(roomId);
+        for (int i = 0; i < room.Width; i++)
+        {
+            for (int j = 0; j < room.Height; j++)
+            {
+                if (i == room.Width / 2 && j == room.Height / 2)
+                {
+                    Vector3? pos = GetPosOfRoomId(roomId, i, j);
+                    if(!pos.HasValue) return;
+                    var obj = Instantiate(gameObject,pos.Value + new Vector3(0,0.5f,0),Quaternion.identity);
+                }
+            }
+        }
+    }
+    public void SortDungeonRooms()
+    {
+        if (dungeonRooms == null || dungeonRooms.Count == 0)
+            return;
+
+        dungeonRooms.Sort((a, b) => a.idRoom.CompareTo(b.idRoom));
+    }
 }
