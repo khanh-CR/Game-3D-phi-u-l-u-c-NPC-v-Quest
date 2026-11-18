@@ -16,12 +16,17 @@ MonoBehaviour:
   level: 2
   randomSeed: 0
   seed: 2
+  maxFloor: 0
   portal: {fileID: 5693000830361015419, guid: 0ea11fee711384f479b5a509a0309a68, type: 3}
   Floors:
   - prefab: {fileID: 9186243745350663760, guid: fe85e38c374089c4786f1340a7a30f99, type: 3}
     Rate: 1
   - prefab: {fileID: 9186243745350663760, guid: fda58f322e0926f449b69dd8d528fdfc, type: 3}
     Rate: 3
+  - prefab: {fileID: 9186243745350663760, guid: b72ae9dfae56fc64c8ea9287097f9efe, type: 3}
+    Rate: 5
+  - prefab: {fileID: 9186243745350663760, guid: 8b60237afc34a774a96c4c262e8d4f1c, type: 3}
+    Rate: 4
   wall: {fileID: 9186243745350663760, guid: d708d88dfd8ec554092c2f7c60fe44ea, type: 3}
   Corridor:
   - prefab: {fileID: 9186243745350663760, guid: fe85e38c374089c4786f1340a7a30f99, type: 3}
