@@ -6525,6 +6525,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4958141964136856, guid: 7738ccb3c7ccb2f4aa36bd30a8fbb7ef, type: 3}
   m_PrefabInstance: {fileID: 996026389}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &999752458
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1986657778937355689, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5589004460952595607, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 725.5355
+      objectReference: {fileID: 0}
+    - target: {fileID: 5589004460952595607, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.11546
+      objectReference: {fileID: 0}
+    - target: {fileID: 5589004460952595607, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 356.08005
+      objectReference: {fileID: 0}
+    - target: {fileID: 5589004460952595607, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.16846864
+      objectReference: {fileID: 0}
+    - target: {fileID: 5589004460952595607, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5589004460952595607, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.9857071
+      objectReference: {fileID: 0}
+    - target: {fileID: 5589004460952595607, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5589004460952595607, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5589004460952595607, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -160.602
+      objectReference: {fileID: 0}
+    - target: {fileID: 5589004460952595607, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
 --- !u!1 &1027786462
 GameObject:
   m_ObjectHideFlags: 0
@@ -13171,6 +13228,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ToonRTS_demo_Knight (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1157037363427294065, guid: 68285d8239397d64c9d3c1ca8bde5438, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1157037363427780369, guid: 68285d8239397d64c9d3c1ca8bde5438, type: 3}
       propertyPath: m_LocalPosition.x
       value: 724.12
@@ -13748,3 +13809,4 @@ SceneRoots:
   - {fileID: 968014732}
   - {fileID: 707005221}
   - {fileID: 1027786464}
+  - {fileID: 999752458}
