@@ -11,7 +11,7 @@ public class PlayerUI : MonoBehaviour
 
         if (Keyboard.current.eKey.wasPressedThisFrame && currentGate != null)
         {
-            currentGate.OpenTheGate();   // Gate tự xác định đang ở trong hay ngoài
+            currentGate.OpenTheGate();   
         }
     }
 }

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: New Skill
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillType: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 5fb49b7c28e37c627eacda530670e341, type: 3}
   cooldown: 1
-  keyPressed: 113
+  keyPressed: 31
   effects:
-  - {fileID: 11400000, guid: c8aefae9f9787fc4f83acea8bc72054a, type: 2}
+  - {fileID: 11400000, guid: 6f6865ffe4b233a48b39d6e6982591b2, type: 2}

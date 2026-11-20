@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public enum SkillType
 {
@@ -17,7 +18,7 @@ public class SkillData : ScriptableObject
     public Sprite icon;
     public float cooldown = 1f;
     [Header("Input")]
-    public KeyCode keyPressed = KeyCode.Q;
+    public Key keyPressed = Key.A;
     [Header("Skill Effects")]
     public List<SkillEffect> effects;
 }
