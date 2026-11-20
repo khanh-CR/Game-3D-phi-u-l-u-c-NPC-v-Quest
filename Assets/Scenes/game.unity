@@ -948,6 +948,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5589004460952595607, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
   m_PrefabInstance: {fileID: 999752458}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &81796254 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+  m_PrefabInstance: {fileID: 999752458}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 81796246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04e82d70b7d9f49429eb6e5a0dabf870, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerTest
 --- !u!1001 &88154908
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3600,7 +3611,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -21.36367, w: 0}
+  m_margin: {x: 0, y: 0, z: -25.720154, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -11935,6 +11946,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GoldManager
   upgradeCost: 10
   multiplier: 1.2
+  upgradeType: 0
+  upgradeAmount: 1
+  player: {fileID: 81796254}
   currencyManager: {fileID: 1027786463}
   upgradeCostText: {fileID: 1156869556}
   upgradeButton: {fileID: 1199674965}
@@ -13943,6 +13957,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GoldManager
   upgradeCost: 10
   multiplier: 1.2
+  upgradeType: 0
+  upgradeAmount: 1
+  player: {fileID: 81796254}
   currencyManager: {fileID: 1027786463}
   upgradeCostText: {fileID: 382773622}
   upgradeButton: {fileID: 1417447976}
@@ -14314,6 +14331,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GoldManager
   upgradeCost: 10
   multiplier: 1.2
+  upgradeType: 0
+  upgradeAmount: 1
+  player: {fileID: 81796254}
   currencyManager: {fileID: 1027786463}
   upgradeCostText: {fileID: 1880756355}
   upgradeButton: {fileID: 1451165756}
