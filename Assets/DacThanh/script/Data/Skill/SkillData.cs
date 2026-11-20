@@ -19,6 +19,7 @@ public class SkillData : ScriptableObject
     public float cooldown = 1f;
     [Header("Input")]
     public Key keyPressed = Key.A;
+    public string description;
     [Header("Skill Effects")]
     public List<SkillEffect> effects;
 }
@@ -35,7 +36,6 @@ public class SkillContext
     public GameObject Caster;
     public GameObject Target;
     public List<GameObject> Targets;
-
     public SkillContext(
         GameObject caster,
         GameObject target = null,
