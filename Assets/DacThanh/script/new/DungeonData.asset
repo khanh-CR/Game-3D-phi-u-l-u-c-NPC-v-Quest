@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: DungeonData
   m_EditorClassIdentifier: Assembly-CSharp::DungeonData
   dungeonWorld: 0
-  level: 2
+  level: 3
   randomSeed: 0
-  seed: 2
+  seed: 3
   maxFloor: 2
   portal: {fileID: 5693000830361015419, guid: 0ea11fee711384f479b5a509a0309a68, type: 3}
   Floors:

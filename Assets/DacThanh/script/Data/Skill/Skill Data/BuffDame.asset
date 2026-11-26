@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0caf05be9b1e964a9e01d178a4efca5, type: 3}
+  m_Name: BuffDame
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  icon: {fileID: 21300000, guid: 24fbd0e7d10a0ea47928134e87d7f62d, type: 3}
+  skillType: 0
+  keyPressed: 43
+  cooldown: 5
+  maxLevel: 3
+  duration: 0
+  effects:
+  - {fileID: 11400000, guid: c752721b6c1c27a4990cf47d1a4572a6, type: 2}

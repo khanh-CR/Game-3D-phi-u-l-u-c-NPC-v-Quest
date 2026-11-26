@@ -20,18 +20,4 @@ public class CharacterData : ScriptableObject
     
     [Header("Skill")]
     public List<SkillData> skills;
-    [Header("Equipment")]
-    public List<SwordPrefabs> swordPrefabs;
-    public List<ArmorPrefabs> armorPrefab;
-}
-[System.Serializable]
-public class SwordPrefabs
-{
-    public GameObject prefab;
-    public int Rate = 1;
-}
-public class ArmorPrefabs
-{
-    public GameObject prefab;
-    public int Rate = 1;
 }

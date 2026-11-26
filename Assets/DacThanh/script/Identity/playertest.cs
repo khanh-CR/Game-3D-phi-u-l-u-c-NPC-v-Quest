@@ -4,17 +4,40 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerTest : MonoBehaviour
+public class PlayerTest : MonoBehaviour, ISkillable
 {
     [SerializeField] public CharacterData data;
     [Header("Attitude")] 
     public int atk;
-    public int def;
+    public int armor;
     public int hp;
     
     public int currentAtk;
-    public int currentDef;
+    public int currentArmor;
     public int currentHp;
+
+    public void SetUp()
+    {
+        
+        atk = data.atk;
+        hp = data.hp;
+        armor = data.armor;
+        
+        currentAtk = atk;
+        currentArmor = armor;
+        currentHp = hp;
+    }
+    [Header("Level")]
+    public int level = 1;
+    public int maxLevel = 20;
+    public int exp;
+    public int baseExp = 100;          
+    public float expGrowth = 1.2f;     
+    public int levelsPerSlot = 5;      
+    public int atkPerLevel = 2, defPerLevel = 1, hpPerLevel = 10;
+    public int ExpToNext => Mathf.Max(1, Mathf.RoundToInt(baseExp * Mathf.Pow(expGrowth, level - 1)));
+    [Header("Skills")]
+    public SkillBook skillBook;
     
     [Header("Movement")]
     public float moveSpeed = 4f;
@@ -23,7 +46,8 @@ public class PlayerTest : MonoBehaviour
     [Header("Gravity")]
     public float gravity = -20f;
 
-    [Header("References")]
+    [Header("References")] 
+    public GameObject AtkArea;
     private CharacterController controller;
     private Animator animator;
     private bool isFirstPersonPerspective = true;
@@ -45,7 +69,10 @@ public class PlayerTest : MonoBehaviour
         controller = GetComponent<CharacterController>();
         tpf = cinemachineCamera.GetComponent<CinemachineThirdPersonFollow>();
         animator = GetComponent<Animator>();
+        skillBook.Init(this);
+        UpdateSkillSlots();
         setCam(isFirstPersonPerspective);
+        SetUp();
     }
     private void Update()
     {
@@ -59,6 +86,7 @@ public class PlayerTest : MonoBehaviour
         HandleLook();
         HandleGravity();
         Move();
+        skillBook.Tick();
     }
 
     public void setCam(bool isFirstPersonPerspective)
@@ -145,10 +173,16 @@ public class PlayerTest : MonoBehaviour
         controller.Move(movement * moveSpeed * Time.deltaTime);
     }
 
-    public void takeDamage(int damage)
+    public void TakeDamage(int amount)
     {
-        Debug.Log("takeDamage");
+        currentHp = Mathf.Max(0, currentHp - Mathf.RoundToInt(amount));
     }
+
+    public void Heal(int amount)
+    {
+        currentHp = Mathf.Min(hp, currentHp + Mathf.RoundToInt(amount));
+    }
+    public void AddAtk(int amount) => currentAtk += amount;
     public void Teleport(Vector3 pos)
     {
         controller.enabled = false;
@@ -156,4 +190,25 @@ public class PlayerTest : MonoBehaviour
         controller.enabled = true;
         verticalVelocity = 0f;
     }
+
+    #region Skill
+    public void AddExp(int amount)
+    {
+        if (level >= maxLevel) return;
+
+        exp += amount;
+        int ups = 0;
+        while (level < maxLevel && exp >= ExpToNext) { exp -= ExpToNext; level++; ups++; }
+        if (level >= maxLevel) exp = 0;      // đạt cấp tối đa thì không tích exp nữa
+        if (ups == 0) return;
+
+        atk += atkPerLevel * ups;  currentAtk += atkPerLevel * ups;
+        armor += defPerLevel * ups;  currentArmor += defPerLevel * ups;
+        hp  += hpPerLevel * ups;   currentHp  += hpPerLevel * ups;
+
+        UpdateSkillSlots();                  // lên level chỉ tăng stats và mở khóa slot
+    }
+    private void UpdateSkillSlots() => skillBook.SetUnlocked(1 + level / Mathf.Max(1, levelsPerSlot));
+
+    #endregion
 }

@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54e23f1f0f695ee4fa69804c08e31f89, type: 3}
   m_Name: Enemy
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
-  atk: 0
-  hp: 0
-  armor: 0
+  atk: 1
+  hp: 5
+  armor: 5
   skills: []
-  swordPrefabs: []

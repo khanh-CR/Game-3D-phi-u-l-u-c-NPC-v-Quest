@@ -72,7 +72,12 @@ public class PlayerSkill : MonoBehaviour
 
         nextUseTimes[index] = Time.time + skill.cooldown;
 
-        SkillContext context = new SkillContext(caster: gameObject);
+        // SkillContext context = new SkillContext(caster: gameObject);
+        SkillContext context = new SkillContext(
+            caster: gameObject,
+            runner: this,
+            duration: skill.duration
+        );
 
         if (skill.effects != null)
         {

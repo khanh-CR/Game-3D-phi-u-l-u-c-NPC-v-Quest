@@ -5,28 +5,30 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : MonoBehaviour, ISkillable
 {
+    [Header("Reference")]
     [SerializeField] public CharacterData data;
-    [Header("attibute")]
     [SerializeField] public GameObject player;
-    [SerializeField] private float attackRange = 2.5f;
-    private float attackSpeed = 0.5f;
-    private bool isTargetInRange;
+    [SerializeField] private GameObject attackArea;
+    [SerializeField] private GameObject RightHand;
     [Header("attibute")]
-    private Animator animator;
-
-    [Header("data")] 
     public int atk;
     public int hp;
     public int armor;
-
+    public int currentHp;
     private void dataInit()
     {
         this.atk = data.atk;
         this.hp = data.hp;
         this.armor = data.armor;
+        this.currentHp = data.hp;
     }
+    [SerializeField] private float attackRange = 2.5f;
+    private float attackSpeed = 0.5f;
+    private bool isTargetInRange;
+    private Animator animator;
+    public int expReward = 20;
     
     
     [Header("vision check")]
@@ -43,6 +45,9 @@ public class EnemyAI : MonoBehaviour
     private float actionTime;
     private bool isWaiting;
     private bool isMoving;
+    [Header("Damage popup")]
+    [SerializeField] private DamagePopup damagePopupPrefab;
+    [SerializeField] private float popupHeight = 2.2f;  
     private void Awake()
     {
         
@@ -54,11 +59,13 @@ public class EnemyAI : MonoBehaviour
         animator = gameObject.GetComponent<Animator>();
     }
 
+    private bool isdead;
     private void Update()
     {
-        if (player == null || !agent.isOnNavMesh)
+        if (isdead || player == null || !agent.isOnNavMesh)
             return;
         CheckHP();
+        if (isdead) return;
         canSeePlayer = CanSeePlayer();
         Move();
         Attack();
@@ -68,10 +75,21 @@ public class EnemyAI : MonoBehaviour
 
     public void CheckHP()
     {
-        if (hp <= 0)
-        {
-            Destroy(gameObject, 5f);
-        }
+        if (currentHp > 0 || isdead) return;
+
+        isdead = true;
+        if (player.TryGetComponent(out PlayerTest p)) p.AddExp(expReward);
+        StopAllCoroutines();               // dừng Hit() đang bắn trigger attack
+        isAttacking = false;
+        agent.isStopped = true;
+        agent.ResetPath();
+
+        animator.ResetTrigger("attack");
+        animator.ResetTrigger("run");
+        animator.ResetTrigger("idle");
+        animator.SetTrigger("die");
+
+        Destroy(gameObject, 5f);
     }
     public void Move()
     {
@@ -132,7 +150,6 @@ public class EnemyAI : MonoBehaviour
         while (canSeePlayer && IsInAttackRange())
         {
             animator.SetTrigger("attack");
-
             Debug.Log("Attack " + n);
             n++;
 
@@ -144,17 +161,6 @@ public class EnemyAI : MonoBehaviour
     public void Animation()
     {
         isMoving = agent.isOnNavMesh && !agent.isStopped && agent.desiredVelocity.sqrMagnitude > 0.01f;
-        if (isMoving)
-        {
-            // animator.ResetTrigger("idle");
-            // animator.SetTrigger("run");
-            // animator.SetBool("run", true);
-        }
-        // else
-        // {
-        //     animator.ResetTrigger("run");
-        //     animator.SetTrigger("idle");
-        // }
         animator.ResetTrigger("run");
         animator.ResetTrigger("idle");
         animator.SetTrigger(isMoving ? "run" : "idle");
@@ -167,22 +173,13 @@ public class EnemyAI : MonoBehaviour
         a.y = 0f; b.y = 0f;
         return Vector3.Distance(a, b) <= attackRange;
     }
-
-    bool HaveAction()
-    {
-        return IsInAttackRange();
-        
-    }
-    public void Die()
-    {
-        
-    }
-
+    
     public void OnSpawn()
     {
         player = DungeonManagers.instance.player;
         agent = GetComponent<NavMeshAgent>();
         agent.stoppingDistance = stoppingDistance;
+        if (data != null) dataInit(); else currentHp = hp;
     }
     private bool CanSeePlayer()
     {
@@ -248,4 +245,14 @@ public class EnemyAI : MonoBehaviour
             right * viewDistance
         );
     }
+
+    public void TakeDamage(int amount)
+    {
+        if (isdead) return;
+        currentHp = Mathf.Max(0, currentHp - amount);
+        DamagePopup.Spawn(damagePopupPrefab, transform.position + Vector3.up * popupHeight, amount);
+    }
+
+    public void Heal(int amount) => currentHp = Mathf.Min(hp, currentHp + amount);
+    public void AddAtk(int amount) => atk += amount;
 }

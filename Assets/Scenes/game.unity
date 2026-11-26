@@ -576,30 +576,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5589004460952595607, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
   m_PrefabInstance: {fileID: 999752458}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &81796253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 81796246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b762fe5945c4ea45ad4bf5ca47b2f58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerSkill
-  skills:
-  - {fileID: 11400000, guid: 165d4b62300ae8941a896c98f1ad57ec, type: 2}
-  - {fileID: 11400000, guid: 165d4b62300ae8941a896c98f1ad57ec, type: 2}
-  - {fileID: 11400000, guid: 165d4b62300ae8941a896c98f1ad57ec, type: 2}
-  - {fileID: 11400000, guid: 165d4b62300ae8941a896c98f1ad57ec, type: 2}
-  - {fileID: 11400000, guid: 165d4b62300ae8941a896c98f1ad57ec, type: 2}
-  skillSlots:
-  - {fileID: 1777359082}
-  - {fileID: 187696249}
-  - {fileID: 133503778}
-  - {fileID: 196630722}
-  - {fileID: 1566997545}
 --- !u!1001 &88154908
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1127,7 +1103,7 @@ GameObject:
   - component: {fileID: 133503776}
   - component: {fileID: 133503778}
   m_Layer: 5
-  m_Name: Skill_1 (2)
+  m_Name: Skill_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1175,8 +1151,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -542603278, guid: b673a3a0a571cde4183a6e1408ca9548, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 3eed96767d510c731d896b6460774c0a, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1287,7 +1263,7 @@ GameObject:
   - component: {fileID: 187696247}
   - component: {fileID: 187696249}
   m_Layer: 5
-  m_Name: Skill_1 (1)
+  m_Name: Skill_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1335,8 +1311,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -542603278, guid: b673a3a0a571cde4183a6e1408ca9548, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 3eed96767d510c731d896b6460774c0a, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1381,7 +1357,7 @@ GameObject:
   - component: {fileID: 196630720}
   - component: {fileID: 196630722}
   m_Layer: 5
-  m_Name: Skill_1 (3)
+  m_Name: Skill_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1429,8 +1405,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -542603278, guid: b673a3a0a571cde4183a6e1408ca9548, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 3eed96767d510c731d896b6460774c0a, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -3766,7 +3742,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4488,7 +4464,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4889,7 +4865,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7458,6 +7434,74 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: hp
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: atk
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: def
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: 3e80cddfbcb298a4a85c07586e433294, type: 2}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: currentHp
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: currentAtk
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: currentDef
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: skillBook.slots.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: skillBook.skills.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: 'skillBook.slots.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1777359082}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: 'skillBook.slots.Array.data[1]'
+      value: 
+      objectReference: {fileID: 187696249}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: 'skillBook.slots.Array.data[2]'
+      value: 
+      objectReference: {fileID: 133503778}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: 'skillBook.slots.Array.data[3]'
+      value: 
+      objectReference: {fileID: 196630722}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: 'skillBook.slots.Array.data[4]'
+      value: 
+      objectReference: {fileID: 1566997545}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: 'skillBook.skills.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 165d4b62300ae8941a896c98f1ad57ec, type: 2}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: 'skillBook.skills.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: c8dbb276b287ce142939efdaac880158, type: 2}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: 'skillBook.skills.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: f08702ba92d592e42a57d52269d7997d, type: 2}
     - target: {fileID: 1986657778937355689, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
       propertyPath: m_Name
       value: Player
@@ -7508,10 +7552,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5589004460952595607, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1270922073}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1986657778937355689, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 81796253}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
 --- !u!1 &1027786462
 GameObject:
@@ -9968,7 +10009,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -11305,7 +11346,7 @@ GameObject:
   - component: {fileID: 1566997547}
   - component: {fileID: 1566997545}
   m_Layer: 5
-  m_Name: Skill_1 (4)
+  m_Name: Skill_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11368,8 +11409,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -542603278, guid: b673a3a0a571cde4183a6e1408ca9548, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 3eed96767d510c731d896b6460774c0a, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -11693,7 +11734,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -13196,8 +13237,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -542603278, guid: b673a3a0a571cde4183a6e1408ca9548, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 3eed96767d510c731d896b6460774c0a, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
