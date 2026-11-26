@@ -2319,9 +2319,9 @@ RectTransform:
   - {fileID: 1762421848}
   m_Father: {fileID: 918446587}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -547.7, y: 224.9}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 200, y: -200}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &248969511
@@ -3820,9 +3820,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 918446587}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -548.8, y: 136.1}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 200, y: -400}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &425822981
@@ -8803,7 +8803,7 @@ RectTransform:
   - {fileID: 248969510}
   - {fileID: 425822980}
   - {fileID: 1811798770}
-  m_Father: {fileID: 1937110871}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -9987,6 +9987,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: 3e80cddfbcb298a4a85c07586e433294, type: 2}
     - target: {fileID: 1986657778937355689, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
       propertyPath: m_Name
       value: Player
@@ -16231,9 +16235,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1363430800198003926, guid: 23f907c94ad92894495c02b43a563c6f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2138922204}
-    - targetCorrespondingSourceObject: {fileID: 1363430800198003926, guid: 23f907c94ad92894495c02b43a563c6f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 918446587}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1846530523549185644, guid: 23f907c94ad92894495c02b43a563c6f, type: 3}
       insertIndex: -1
@@ -22763,4 +22764,5 @@ SceneRoots:
   - {fileID: 707005221}
   - {fileID: 1027786464}
   - {fileID: 999752458}
+  - {fileID: 918446587}
   - {fileID: 535159545}

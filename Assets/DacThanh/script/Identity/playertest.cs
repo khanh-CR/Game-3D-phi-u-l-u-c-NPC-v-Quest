@@ -57,7 +57,7 @@ public class PlayerTest : MonoBehaviour, ISkillable
     public CinemachineCamera cinemachineCamera;
     public Transform cameraTarget;
     private CinemachineThirdPersonFollow tpf;
-    private float zoomSpeed = 20f;
+    private float zoomSpeed = 40f;
     private float minZoom = 0f;
     private float maxZoom = 1.5f;
 
