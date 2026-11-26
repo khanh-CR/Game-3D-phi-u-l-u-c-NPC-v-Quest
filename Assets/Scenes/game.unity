@@ -21549,6 +21549,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: BAR
       objectReference: {fileID: 0}
+    - target: {fileID: 2479191647071486968, guid: 77b674befe337ad46a78009acf632b85, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.1560009
+      objectReference: {fileID: 0}
+    - target: {fileID: 2479191647071486968, guid: 77b674befe337ad46a78009acf632b85, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.0000000079162
+      objectReference: {fileID: 0}
+    - target: {fileID: 2479191647071486968, guid: 77b674befe337ad46a78009acf632b85, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.29136
+      objectReference: {fileID: 0}
+    - target: {fileID: 2479191647071486968, guid: 77b674befe337ad46a78009acf632b85, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.0000000074506
+      objectReference: {fileID: 0}
     - target: {fileID: 2483773981230169126, guid: 77b674befe337ad46a78009acf632b85, type: 3}
       propertyPath: m_LocalScale.y
       value: 1.166
