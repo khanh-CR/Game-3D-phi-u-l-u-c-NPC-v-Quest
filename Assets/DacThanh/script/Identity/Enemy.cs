@@ -176,10 +176,13 @@ public class EnemyAI : MonoBehaviour, ISkillable
     
     public void OnSpawn()
     {
-        player = DungeonManagers.instance.player;
+        if (data != null) dataInit(); else currentHp = hp;
+        var dm = DungeonManagers.instance;
+        if (dm == null) return;
+        player = dm.player;
         agent = GetComponent<NavMeshAgent>();
         agent.stoppingDistance = stoppingDistance;
-        if (data != null) dataInit(); else currentHp = hp;
+        
     }
     private bool CanSeePlayer()
     {
