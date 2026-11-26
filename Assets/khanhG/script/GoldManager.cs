@@ -6,9 +6,22 @@ using System;
 
 public class GoldManager : MonoBehaviour
 {
+    public enum UpgradeType
+    {
+        Atk,
+        Def,
+        Hp
+    }
+
     [Header("Upgrade")]
     public double upgradeCost = 10;
     public double multiplier = 1.2;
+
+    public UpgradeType upgradeType;
+    public int upgradeAmount = 1;
+
+    [Header("Player")]
+    public PlayerTest player;
 
     [Header("Currency Manager")]
     public CurrencyManager currencyManager;
@@ -24,20 +37,34 @@ public class GoldManager : MonoBehaviour
 
     public void Upgrade()
     {
-        // Kiểm tra và trừ vàng từ CurrencyManager
-        if (currencyManager == null)
+        if (currencyManager == null || player == null)
             return;
 
         if (!currencyManager.SpendGold(upgradeCost))
             return;
 
-        // Tăng tốc độ kiếm vàng x1.2
-        currencyManager.goldPerSecond *= multiplier;
+        // Cộng chỉ số trực tiếp vào Player
+        switch (upgradeType)
+        {
+            case UpgradeType.Atk:
+                player.UpgradeAtk(upgradeAmount);
+                break;
 
-        // Tăng giá nâng cấp tiếp theo x1.2
+            case UpgradeType.Def:
+                player.UpgradeDef(upgradeAmount);
+                break;
+
+            case UpgradeType.Hp:
+                player.UpgradeHp(upgradeAmount);
+                break;
+        }
+
+        // Tăng giá nâng cấp tiếp theo
         upgradeCost = Math.Ceiling(upgradeCost * multiplier);
 
         UpdateUI();
+
+        Debug.Log("Upgrade thành công: " + upgradeType);
     }
 
     void Update()

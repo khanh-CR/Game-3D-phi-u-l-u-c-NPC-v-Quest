@@ -55,7 +55,7 @@ public class PlayerTest : MonoBehaviour, ISkillable
 
     [Header("Camera Settings")]
     public CinemachineCamera cinemachineCamera;
-    public Transform cameraTarget; // Object con của Player, kéo vào Tracking Target của CinemachineCamera
+    public Transform cameraTarget;
     private CinemachineThirdPersonFollow tpf;
     private float zoomSpeed = 20f;
     private float minZoom = 0f;
@@ -63,6 +63,9 @@ public class PlayerTest : MonoBehaviour, ISkillable
 
     private float cameraPitch = 0f;
     private float cameraDistance = 0f;
+
+    // Alt cursor control
+    private bool isAltPressed = false;
 
     private void Start()
     {
@@ -72,42 +75,82 @@ public class PlayerTest : MonoBehaviour, ISkillable
         skillBook.Init(this);
         UpdateSkillSlots();
         setCam(isFirstPersonPerspective);
+        SetCursorState(false);
         SetUp();
     }
     private void Update()
     {
+        HandleCursor();
 
-        if (Keyboard.current.vKey.wasPressedThisFrame)
+        // Chỉ điều khiển camera khi chuột đang bị khóa
+        if (!isAltPressed)
         {
-            isFirstPersonPerspective = !isFirstPersonPerspective;
-            setCam(isFirstPersonPerspective);
+            if (Keyboard.current != null &&
+                Keyboard.current.vKey.wasPressedThisFrame)
+            {
+                isFirstPersonPerspective = !isFirstPersonPerspective;
+                setCam(isFirstPersonPerspective);
+            }
+
+            HandleZoom();
+            HandleLook();
         }
-        HandleZoom();
-        HandleLook();
+
         HandleGravity();
         Move();
         skillBook.Tick();
     }
+
+    // ================= CURSOR =================
+
+    private void HandleCursor()
+    {
+        if (Keyboard.current == null) return;
+
+        bool altPressed =
+            Keyboard.current.leftAltKey.isPressed ||
+            Keyboard.current.rightAltKey.isPressed;
+
+        if (altPressed != isAltPressed)
+        {
+            isAltPressed = altPressed;
+            SetCursorState(isAltPressed);
+        }
+    }
+
+    private void SetCursorState(bool showCursor)
+    {
+        if (showCursor)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+
+    // ================= CAMERA =================
 
     public void setCam(bool isFirstPersonPerspective)
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // Pivot đặt ngang tầm đầu (tương ứng TargetOffset y = 1 trước đây)
         cameraTarget.localPosition = new Vector3(0, 0f, 0);
 
         if (isFirstPersonPerspective)
         {
             cameraPitch = 0f;
-            tpf.ShoulderOffset = new Vector3(0,1f,0);
+            tpf.ShoulderOffset = new Vector3(0, 1f, 0);
             tpf.VerticalArmLength = 0f;
             tpf.CameraSide = 0.5f;
             tpf.CameraDistance = 0.1f;
         }
         else
         {
-            // Tương ứng TargetOffset (0, 2, -1) trước đây, chỉnh lại cho vừa mắt
             cameraPitch = 50f;
             tpf.ShoulderOffset = new Vector3(0f, 2f, -2f);
             tpf.VerticalArmLength = 1f;
@@ -133,15 +176,17 @@ public class PlayerTest : MonoBehaviour, ISkillable
         if (Mouse.current == null) return;
         Vector2 mouseDelta = Mouse.current.delta.ReadValue();
 
-        // Xoay ngang: luôn xoay Player
         transform.Rotate(Vector3.up * mouseDelta.x * rotationSpeed);
-        // Góc thứ nhất: xoay dọc bình thường
-        
-        if(isFirstPersonPerspective) cameraPitch -= mouseDelta.y * rotationSpeed;
-        // else cameraPitch = 50f;
+
+        if (isFirstPersonPerspective)
+            cameraPitch -= mouseDelta.y * rotationSpeed;
+
         cameraPitch = Mathf.Clamp(cameraPitch, -35f, 70f);
+
         cameraTarget.localRotation = Quaternion.Euler(cameraPitch, 0f, 0f);
     }
+
+    // ================= MOVEMENT =================
 
     private void HandleGravity()
     {
@@ -167,17 +212,52 @@ public class PlayerTest : MonoBehaviour, ISkillable
         }
 
         input = input.normalized;
-        animator.SetFloat("Speed", input.magnitude);
+
+        if (animator != null)
+            animator.SetFloat("Speed", input.magnitude);
 
         Vector3 movement = transform.right * input.x + transform.forward * input.y;
         controller.Move(movement * moveSpeed * Time.deltaTime);
     }
+    // ================= UPGRADE STATS =================
 
+    public void UpgradeAtk(int amount)
+    {
+        atk += amount;
+        currentAtk += amount;
+
+        Debug.Log("ATK upgraded: " + currentAtk);
+    }
+
+    public void UpgradeDef(int amount)
+    {
+        currentArmor += amount;
+        currentArmor += amount;
+
+        Debug.Log("DEF upgraded: " + currentArmor);
+    }
+
+    public void UpgradeHp(int amount)
+    {
+        hp += amount;
+        currentHp += amount;
+
+        Debug.Log("HP upgraded: " + currentHp);
+    }
     public void TakeDamage(int amount)
     {
         currentHp = Mathf.Max(0, currentHp - Mathf.RoundToInt(amount));
     }
+    public void takeDamage(int damage)
+    {
+        int actualDamage = Mathf.Max(0, damage - currentArmor);
 
+        currentHp -= actualDamage;
+        currentHp = Mathf.Max(0, currentHp);
+
+        Debug.Log("Player took damage: " + actualDamage);
+        Debug.Log("Current HP: " + currentHp);
+    }
     public void Heal(int amount)
     {
         currentHp = Mathf.Min(hp, currentHp + Mathf.RoundToInt(amount));
@@ -188,9 +268,14 @@ public class PlayerTest : MonoBehaviour, ISkillable
         controller.enabled = false;
         transform.position = pos;
         controller.enabled = true;
+
         verticalVelocity = 0f;
     }
-
+    private void OnDisable()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
     #region Skill
     public void AddExp(int amount)
     {
