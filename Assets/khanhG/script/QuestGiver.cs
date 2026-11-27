@@ -1,87 +1,104 @@
-
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+// Gắn lên NPC (cần Collider với Is Trigger bật, to hơn NPC để tạo vùng nói chuyện).
+// E: mở/đóng hội thoại. Phím 1..9: nhận quest, hoặc nhận thưởng nếu quest đã hoàn thành.
 public class QuestGiver : MonoBehaviour
 {
-    [Header("Thong tin nhiem vu")]
-    [SerializeField]
-    private string questName = "Hoan thanh Dungeon 1";
+    [SerializeField] private string npcName = "NPC";
+    [SerializeField] private QuestData[] quests;          // giao bao nhiêu quest (main/side) cũng được
+    [SerializeField] private GameObject interactHint;     // chữ "Nhấn E để nói chuyện"
+    [SerializeField] private QuestUIManager ui;
 
-    [TextArea(3, 6)]
-    [SerializeField]
-    private string questDescription =
-        "Hay di vao Dungeon 1 va tieu diet quai vat.";
+    private List<QuestData> shown = new List<QuestData>();
+    private bool playerNear, talking;
 
-    [SerializeField]
-    private string questReward = "100 Gold + 50 EXP";
+    private void Start() => SetHint(false);
 
-    [Header("NPC Interaction")]
-    [SerializeField] private GameObject interactUI;
-
-    [Header("Quest UI Manager")]
-    [SerializeField] private QuestUIManager questUIManager;
-
-    private bool playerNear = false;
-    private bool questAccepted = false;
-
-    void Start()
+    private void Update()
     {
-        if (interactUI != null)
-            interactUI.SetActive(false);
-    }
+        Keyboard kb = Keyboard.current;
+        if (kb == null || !playerNear) return;
 
-    void Update()
-    {
-        if (Keyboard.current == null)
-            return;
-
-        if (playerNear &&
-            !questAccepted &&
-            Keyboard.current.eKey.wasPressedThisFrame)
+        if (kb.eKey.wasPressedThisFrame)
         {
-            AcceptQuest();
+            if (talking) Close(); else Open();
+            return;
+        }
+
+        if (!talking) return;
+        if (kb.escapeKey.wasPressedThisFrame) { Close(); return; }
+
+        // Phím 1..9 chọn quest tương ứng trong danh sách
+        for (int i = 0; i < shown.Count; i++)
+        {
+            if (kb[(Key)((int)Key.Digit1 + i)].wasPressedThisFrame)
+            {
+                Select(shown[i]);
+                break;
+            }
         }
     }
 
-    void AcceptQuest()
+    private void Open()
     {
-        if (questAccepted || questUIManager == null)
-            return;
+        if (QuestManager.Instance == null || ui == null) return;
 
-        questAccepted = true;
+        talking = true;
+        SetHint(false);
+        Refresh();
+    }
 
-        if (interactUI != null)
-            interactUI.SetActive(false);
+    private void Close()
+    {
+        talking = false;
+        ui.HideDialog();
+        SetHint(playerNear);
+    }
 
-        questUIManager.SetQuest(
-            questName,
-            questDescription,
-            questReward
-        );
+    // Hiện các quest đã mở khóa và chưa nhận thưởng; Main xếp trước Side (tối đa 9 quest cùng lúc)
+    private void Refresh()
+    {
+        QuestManager qm = QuestManager.Instance;
+        shown = quests
+            .Where(q => q != null && qm.IsUnlocked(q) && qm.GetState(q) != QuestState.Rewarded)
+            .OrderBy(q => q.type)
+            .Take(9)
+            .ToList();
 
-        Debug.Log("Da nhan nhiem vu: " + questName);
+        ui.ShowDialog(npcName, shown);
+    }
+
+    private void Select(QuestData q)
+    {
+        QuestManager qm = QuestManager.Instance;
+        QuestState state = qm.GetState(q);
+
+        if (state == QuestState.Available) qm.Accept(q);            // nhận (hoặc nhận lại nếu đã thất bại)
+        else if (state == QuestState.Completed) qm.Claim(q);        // về trả quest, nhận gold
+
+        Refresh();
+    }
+
+    private void SetHint(bool on)
+    {
+        if (interactHint != null) interactHint.SetActive(on);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            playerNear = true;
-
-            if (!questAccepted && interactUI != null)
-                interactUI.SetActive(true);
-        }
+        if (!other.CompareTag("Player")) return;
+        playerNear = true;
+        SetHint(!talking);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            playerNear = false;
-
-            if (interactUI != null)
-                interactUI.SetActive(false);
-        }
+        if (!other.CompareTag("Player")) return;
+        playerNear = false;
+        if (talking) Close();
+        SetHint(false);
     }
 }

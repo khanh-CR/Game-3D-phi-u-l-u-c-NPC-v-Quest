@@ -4846,8 +4846,10 @@ GameObject:
   m_Component:
   - component: {fileID: 535159545}
   - component: {fileID: 535159546}
+  - component: {fileID: 535159548}
+  - component: {fileID: 535159547}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4865,7 +4867,8 @@ Transform:
   m_LocalPosition: {x: 725.3832, y: 1.88312, z: 356.12897}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 918446587}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &535159546
@@ -4884,6 +4887,36 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: ee0f3e048b0c2c145823cc6f1a9cd381, type: 2}
   sceneIndex: 2
   yOffset: 2
+--- !u!114 &535159547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535159544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c10f9026aae9a444db4f9e89a860ea95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestUIManager
+  dialogPanel: {fileID: 0}
+  dialogText: {fileID: 0}
+  trackerText: {fileID: 0}
+  goldText: {fileID: 0}
+  messageText: {fileID: 0}
+  messageTime: 3
+--- !u!114 &535159548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535159544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 391d5cd05badf3646a816a0a4f54894b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuestManager
 --- !u!4 &543390217 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4721780193091316, guid: efdb3ed10ba9c6b418a492aa30ba0edd, type: 3}
@@ -6829,21 +6862,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 707005219}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c10f9026aae9a444db4f9e89a860ea95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestUIManager
-  questPanel: {fileID: 1811798769}
-  questIcon: {fileID: 425822979}
-  openButton: {fileID: 425822981}
-  closeButton: {fileID: 1115990307}
-  questNameText: {fileID: 1756004076}
-  questDescriptionText: {fileID: 1997843093}
-  questRewardText: {fileID: 426812792}
-  player: {fileID: 1198299950}
-  npc: {fileID: 1937110871}
-  interactDistance: 3
+  dialogPanel: {fileID: 0}
+  dialogText: {fileID: 0}
+  trackerText: {fileID: 0}
+  goldText: {fileID: 0}
+  messageText: {fileID: 0}
+  messageTime: 3
 --- !u!4 &707005221
 Transform:
   m_ObjectHideFlags: 0
@@ -9022,7 +9051,7 @@ RectTransform:
   - {fileID: 248969510}
   - {fileID: 425822980}
   - {fileID: 1811798770}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 535159545}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -12195,11 +12224,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: efdb3ed10ba9c6b418a492aa30ba0edd, type: 3}
---- !u!4 &1198299950 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1157037363427780369, guid: 68285d8239397d64c9d3c1ca8bde5438, type: 3}
-  m_PrefabInstance: {fileID: 1324331878175667588}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1199674963
 GameObject:
   m_ObjectHideFlags: 0
@@ -19601,11 +19625,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 354edd402b08b0b409eed9e054a3a75c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestGiver
-  questName: "Nhi\u1EC7m V\u1EE5"
-  questDescription: "Ho\xE0n th\xE0nh dungeon \u0111\u1EA7u ti\xEAn\n"
-  questReward: 300 Gold + 100 exp
-  interactUI: {fileID: 1388561393}
-  questUIManager: {fileID: 0}
+  npcName: NPC
+  quests: []
+  interactHint: {fileID: 0}
+  ui: {fileID: 0}
 --- !u!1001 &1939371987
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24171,5 +24194,4 @@ SceneRoots:
   - {fileID: 707005221}
   - {fileID: 1027786464}
   - {fileID: 999752458}
-  - {fileID: 918446587}
   - {fileID: 535159545}

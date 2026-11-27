@@ -627,7 +627,7 @@ MonoBehaviour:
     m_Bits: 0
   stoppingDistance: 1.5
   damagePopupPrefab: {fileID: 6017952544176092623, guid: aa4895e817bb372449e558bafae076c2, type: 3}
-  popupHeight: 2.2
+  popupHeight: 1.5
 --- !u!1 &2687462181157298209
 GameObject:
   m_ObjectHideFlags: 0

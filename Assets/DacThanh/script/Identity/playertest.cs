@@ -183,7 +183,7 @@ public class PlayerTest : MonoBehaviour, ISkillable
 
         cameraPitch = Mathf.Clamp(cameraPitch, -35f, 70f);
 
-        cameraTarget.localRotation = Quaternion.Euler(cameraPitch, 0f, 0f);
+        cameraTarget.localRotation = Quaternion.Euler(cameraPitch, 0f, 0f); 
     }
 
     // ================= MOVEMENT =================
