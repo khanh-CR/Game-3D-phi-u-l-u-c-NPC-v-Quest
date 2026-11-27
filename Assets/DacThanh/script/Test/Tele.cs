@@ -8,7 +8,7 @@ public class Tele : MonoBehaviour
 {
     public GameObject target;   // Player (root object)
     public DungeonData data;
-    public int sceneIndex = 1;
+    public int sceneIndex = 2;
     public float yOffset = 2f;
 
     private void Update()
@@ -29,23 +29,67 @@ public class Tele : MonoBehaviour
         SceneManager.LoadScene(sceneIndex);
     }
 
+    // private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    // {
+    //     SceneManager.sceneLoaded -= OnSceneLoaded;
+    //     // target.GetComponent<TopDownPlayerController>().mainCamera =  Camera.main;
+    //     DungeonManagers mgr = DungeonManagers.instance;
+    //     mgr.player = target;
+    //     if (mgr == null)
+    //     {
+    //         Debug.LogError("Tele: scene mới không có DungeonManagers");
+    //         return;
+    //     }
+    //     mgr.CreateDungeon(data);
+    //     Vector3? pos = mgr.GetPosOfRoomId(0, 5, 5);
+    //     if (pos != null && target != null) TeleportTo(pos.Value);
+    //     Destroy(gameObject);
+    // }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
-        // target.GetComponent<TopDownPlayerController>().mainCamera =  Camera.main;
+
+        // Kiểm tra DungeonManagers
         DungeonManagers mgr = DungeonManagers.instance;
-        mgr.player = target;
+
         if (mgr == null)
         {
-            Debug.LogError("Tele: scene mới không có DungeonManagers");
+            Debug.LogError("Tele: Scene mới không có DungeonManagers!");
             return;
         }
+
+        // Kiểm tra Player
+        if (target == null)
+        {
+            Debug.LogError("Tele: Target (Player) bị null!");
+            return;
+        }
+
+        // Kiểm tra DungeonData
+        if (data == null)
+        {
+            Debug.LogError("Tele: DungeonData chưa được gán!");
+            return;
+        }
+
+        mgr.player = target;
+
+        // Tạo Dungeon
         mgr.CreateDungeon(data);
+
         Vector3? pos = mgr.GetPosOfRoomId(0, 5, 5);
-        if (pos != null && target != null) TeleportTo(pos.Value);
+
+        if (pos.HasValue)
+        {
+            TeleportTo(pos.Value);
+        }
+        else
+        {
+            Debug.LogError("Tele: Không tìm thấy vị trí phòng (0, 5, 5)!");
+        }
+
         Destroy(gameObject);
     }
-
     private void TeleportTo(Vector3 pos)
     {
         CharacterController cc = target.GetComponent<CharacterController>();

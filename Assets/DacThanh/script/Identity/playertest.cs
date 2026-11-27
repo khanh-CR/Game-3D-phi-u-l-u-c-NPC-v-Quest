@@ -151,7 +151,7 @@ public class PlayerTest : MonoBehaviour, ISkillable
         }
         else
         {
-            cameraPitch = 50f;
+            cameraPitch = 40f;
             tpf.ShoulderOffset = new Vector3(0f, 2f, -2f);
             tpf.VerticalArmLength = 1f;
             tpf.CameraSide = 0.5f;

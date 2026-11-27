@@ -4882,7 +4882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Tele
   target: {fileID: 81796246}
   data: {fileID: 11400000, guid: ee0f3e048b0c2c145823cc6f1a9cd381, type: 2}
-  sceneIndex: 1
+  sceneIndex: 2
   yOffset: 2
 --- !u!4 &543390217 stripped
 Transform:
@@ -24065,7 +24065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ef20bc5d8954b542a1fc7359ba7a7de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealthBar
-  fill: {fileID: 2950214607693237637}
+  fill: {fileID: 0}
 --- !u!114 &7632267017592003314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24078,7 +24078,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ef20bc5d8954b542a1fc7359ba7a7de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealthBar
-  fill: {fileID: 2950214607580958533}
+  fill: {fileID: 0}
 --- !u!1 &9105016222094353268
 GameObject:
   m_ObjectHideFlags: 0
