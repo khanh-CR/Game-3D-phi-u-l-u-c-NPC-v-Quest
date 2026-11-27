@@ -1,44 +1,63 @@
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
-// Gắn lên Canvas. Đặt ở scene nào thì scene đó hiện được quest / gold / thông báo.
 public class QuestUIManager : MonoBehaviour
 {
     [Header("Hội thoại NPC")]
     [SerializeField] private GameObject dialogPanel;
-    [SerializeField] private TMP_Text dialogText;
+    [SerializeField] private TMP_Text dialogTitle;
+    [SerializeField] private TMP_Text emptyText;
+    [SerializeField] private Transform buttonContent;
+    [SerializeField] private QuestButtonUI questButtonPrefab;
 
-    [Header("HUD")]
-    [SerializeField] private TMP_Text trackerText;    // danh sách nhiệm vụ đang làm
+    [Header("Quest Tracker")]
+    [SerializeField] private GameObject trackerPanel;
+    [SerializeField] private TMP_Text trackerText;
     [SerializeField] private TMP_Text goldText;
-    [SerializeField] private TMP_Text messageText;    // thông báo ngắn
+
+    [Header("Thông báo")]
+    [SerializeField] private TMP_Text messageText;
     [SerializeField] private float messageTime = 3f;
 
     private QuestManager qm;
     private float messageUntil;
+
     private readonly StringBuilder sb = new StringBuilder();
 
     private void Start()
     {
-        qm = QuestManager.Instance;   // lấy ở Start để chắc chắn QuestManager đã Awake
-        if (qm == null) return;
+        qm = QuestManager.Instance;
+
+        if (qm == null)
+        {
+            Debug.LogError("Không tìm thấy QuestManager!");
+            return;
+        }
 
         qm.OnChanged += RefreshHud;
         qm.OnMessage += ShowMessage;
-        RefreshHud();
         HideDialog();
+        RefreshHud();
 
-        string pending = qm.TakePendingMessage();   // vd: "nhiệm vụ thất bại" sau khi rời dungeon
-        if (pending != null) ShowMessage(pending);
+        string pending = qm.TakePendingMessage();
+
+        if (!string.IsNullOrEmpty(pending))
+            ShowMessage(pending);
     }
 
     private void OnDestroy()
     {
-        if (qm == null) return;
-        qm.OnChanged -= RefreshHud;
-        qm.OnMessage -= ShowMessage;
+        if (qm != null)
+        {
+            qm.OnChanged -= RefreshHud;
+            qm.OnMessage -= ShowMessage;
+        }
     }
 
     private void Update()
@@ -46,71 +65,130 @@ public class QuestUIManager : MonoBehaviour
         if (messageUntil > 0f && Time.time > messageUntil)
         {
             messageUntil = 0f;
-            SetText(messageText, "");
+
+            if (messageText != null)
+                messageText.text = "";
+        }
+
+        if (Keyboard.current.qKey.wasPressedThisFrame)
+        {
+            if (trackerPanel == null)
+                return;
+
+            trackerPanel.SetActive(!trackerPanel.activeSelf);
         }
     }
 
-    #region Hội thoại
-    public void ShowDialog(string npcName, List<QuestData> list, string closeKey = "E")
+    // =====================================================
+    // HỘI THOẠI NPC
+    // =====================================================
+
+    public void ShowDialog(
+        string npcName,
+        List<QuestData> quests,
+        Action<QuestData> onSelect)
     {
-        sb.Clear();
-        sb.AppendLine($"<b>{npcName}</b>\n");
-
-        if (list.Count == 0) sb.AppendLine("Hiện không có nhiệm vụ nào.");
-
-        for (int i = 0; i < list.Count; i++)
+        if (dialogPanel == null || buttonContent == null ||
+            questButtonPrefab == null)
         {
-            QuestData q = list[i];
-            string kind = q.type == QuestType.Main ? "<color=#FFD54F>[Chính]</color>" : "[Phụ]";
-            sb.AppendLine($"[{i + 1}] {kind} {q.title} (+{q.goldReward} Gold) - {StateLabel(q)}");
-            sb.AppendLine($"      {q.description}");
+            Debug.LogError("Chưa thiết lập đầy đủ Quest Dialog UI!");
+            return;
         }
 
-        sb.AppendLine($"\nNhấn số để chọn   |   {closeKey} / Esc để đóng");
-        SetText(dialogText, sb.ToString());
-        if (dialogPanel != null) dialogPanel.SetActive(true);
+        dialogPanel.SetActive(true);
+
+        if (dialogTitle != null)
+            dialogTitle.text = npcName;
+
+        // Xóa các Button cũ.
+        for (int i = buttonContent.childCount - 1; i >= 0; i--)
+        {
+            Destroy(buttonContent.GetChild(i).gameObject);
+        }
+
+        bool hasQuest = quests != null && quests.Count > 0;
+
+        if (emptyText != null)
+            emptyText.gameObject.SetActive(!hasQuest);
+
+        if (!hasQuest)
+            return;
+
+        foreach (QuestData q in quests)
+        {
+            if (q == null) continue;
+
+            QuestButtonUI item =
+                Instantiate(questButtonPrefab, buttonContent);
+
+            QuestState state = qm.GetState(q);
+            int kills = qm.GetKills(q);
+
+            item.Setup(
+                npcName,
+                q,
+                state,
+                kills,
+                () => onSelect?.Invoke(q)
+            );
+        }
     }
 
     public void HideDialog()
     {
-        if (dialogPanel != null) dialogPanel.SetActive(false);
+        if (dialogPanel != null)
+            dialogPanel.SetActive(false);
     }
 
-    private string StateLabel(QuestData q)
-    {
-        switch (qm.GetState(q))
-        {
-            case QuestState.Available: return "Nhấn số để nhận";
-            case QuestState.Completed: return "<color=#7CFC00>Hoàn thành - nhấn số để nhận thưởng</color>";
-            default: return $"Đang làm {qm.GetKills(q)}/{q.requiredKills}";
-        }
-    }
-    #endregion
-
-    #region HUD
+    // =====================================================
+    // QUEST TRACKER
+    // =====================================================
+    
     private void RefreshHud()
     {
-        SetText(goldText, $"Gold: {qm.Gold}");
+        if (qm == null)
+            return;
+
+        if (goldText != null)
+            goldText.text = "Gold: " + qm.Gold;
 
         sb.Clear();
+
         foreach (QuestData q in qm.ActiveQuests())
         {
-            sb.AppendLine(qm.GetState(q) == QuestState.Completed
-                ? $"{q.title}: <color=#7CFC00>Hoàn thành - về gặp NPC</color>"
-                : $"{q.title}: {qm.GetKills(q)}/{q.requiredKills}");
+            QuestState state = qm.GetState(q);
+
+            if (state == QuestState.Completed)
+            {
+                sb.AppendLine(
+                    $"<b>{q.title}</b>: " +
+                    "<color=#7CFC00>Hoàn thành - về gặp NPC nhận thưởng</color>");
+            }
+            else
+            {
+                sb.AppendLine(
+                    $"{q.title}: {qm.GetKills(q)}/{q.requiredKills}");
+            }
         }
-        SetText(trackerText, sb.ToString());
+
+        if (trackerText != null)
+        {
+            trackerText.text = sb.Length > 0
+                ? sb.ToString()
+                : "Chưa có nhiệm vụ đang thực hiện.";
+        }
     }
+
+    // =====================================================
+    // THÔNG BÁO
+    // =====================================================
 
     private void ShowMessage(string message)
     {
-        SetText(messageText, message);
+        if (messageText == null)
+            return;
+
+        messageText.text = message;
         messageUntil = Time.time + messageTime;
     }
-
-    private static void SetText(TMP_Text t, string s)
-    {
-        if (t != null) t.text = s;
-    }
-    #endregion
 }
