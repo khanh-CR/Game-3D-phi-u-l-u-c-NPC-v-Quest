@@ -150,25 +150,18 @@ public class QuestUIManager : MonoBehaviour
             return;
 
         if (goldText != null)
-            goldText.text = "Gold: " + qm.Gold;
+            goldText.text = "   " + qm.Gold;
 
         sb.Clear();
-
         foreach (QuestData q in qm.ActiveQuests())
         {
-            QuestState state = qm.GetState(q);
+            if (sb.Length > 0) sb.Append("   |   ");   // ngăn cách các quest, không xuống dòng
 
+            QuestState state = qm.GetState(q);
             if (state == QuestState.Completed)
-            {
-                sb.AppendLine(
-                    $"<b>{q.title}</b>: " +
-                    "<color=#7CFC00>Hoàn thành - về gặp NPC nhận thưởng</color>");
-            }
+                sb.Append($"<b>{q.title}</b>: <color=#7CFC00>Hoàn thành - về gặp NPC nhận thưởng</color>");
             else
-            {
-                sb.AppendLine(
-                    $"{q.title}: {qm.GetKills(q)}/{q.requiredKills}");
-            }
+                sb.Append($"{q.title}: {qm.GetKills(q)}/{q.requiredKills}");
         }
 
         if (trackerText != null)
