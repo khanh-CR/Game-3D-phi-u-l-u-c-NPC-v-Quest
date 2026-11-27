@@ -11,7 +11,7 @@ public class QuestGiver : MonoBehaviour
     [SerializeField] private QuestData[] quests;          // giao bao nhiêu quest (main/side) cũng được
     [SerializeField] private GameObject interactHint;     // chữ "Nhấn E để nói chuyện"
     [SerializeField] private QuestUIManager ui;
-
+    [SerializeField] private Key keyPressed = Key.E;
     private List<QuestData> shown = new List<QuestData>();
     private bool playerNear, talking;
 
@@ -22,14 +22,14 @@ public class QuestGiver : MonoBehaviour
         Keyboard kb = Keyboard.current;
         if (kb == null || !playerNear) return;
 
-        if (kb.eKey.wasPressedThisFrame)
+        if (keyPressed != Key.None && kb[keyPressed].wasPressedThisFrame)
         {
             if (talking) Close(); else Open();
             return;
         }
 
         if (!talking) return;
-        if (kb.escapeKey.wasPressedThisFrame) { Close(); return; }
+        if (kb[Key.Escape].wasPressedThisFrame) { Close(); return; }
 
         // Phím 1..9 chọn quest tương ứng trong danh sách
         for (int i = 0; i < shown.Count; i++)
@@ -68,7 +68,7 @@ public class QuestGiver : MonoBehaviour
             .Take(9)
             .ToList();
 
-        ui.ShowDialog(npcName, shown);
+        ui.ShowDialog(npcName, shown, keyPressed.ToString());
     }
 
     private void Select(QuestData q)

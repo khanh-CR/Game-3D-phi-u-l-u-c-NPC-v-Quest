@@ -51,7 +51,7 @@ public class QuestUIManager : MonoBehaviour
     }
 
     #region Hội thoại
-    public void ShowDialog(string npcName, List<QuestData> list)
+    public void ShowDialog(string npcName, List<QuestData> list, string closeKey = "E")
     {
         sb.Clear();
         sb.AppendLine($"<b>{npcName}</b>\n");
@@ -66,7 +66,7 @@ public class QuestUIManager : MonoBehaviour
             sb.AppendLine($"      {q.description}");
         }
 
-        sb.AppendLine("\nNhấn số để chọn   |   E / Esc để đóng");
+        sb.AppendLine($"\nNhấn số để chọn   |   {closeKey} / Esc để đóng");
         SetText(dialogText, sb.ToString());
         if (dialogPanel != null) dialogPanel.SetActive(true);
     }
