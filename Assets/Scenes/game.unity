@@ -980,10 +980,30 @@ MonoBehaviour:
   attackDamage: 2
   attackRange: 1.03
   attackCooldown: 0.9
+  swordSound: {fileID: 0}
+  swordVolume: 1
   attackPoint: {fileID: 1070725260}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 0
+--- !u!114 &81796260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 81796246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73f186af492f4e14fa96b6ae353462a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAudio
+  footstepSounds: []
+  footstepInterval: 0.4
+  footstepVolume: 0.8
+  attackSound: {fileID: 0}
+  attackVolume: 1
+  movementThreshold: 0.02
 --- !u!1001 &88154908
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10611,6 +10631,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1986657778937355689, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 81796259}
+    - targetCorrespondingSourceObject: {fileID: 1986657778937355689, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 81796260}
   m_SourcePrefab: {fileID: 100100000, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
 --- !u!114 &999752459 stripped
 MonoBehaviour:
