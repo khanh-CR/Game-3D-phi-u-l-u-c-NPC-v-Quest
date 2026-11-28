@@ -980,8 +980,8 @@ MonoBehaviour:
   attackDamage: 2
   attackRange: 1.03
   attackCooldown: 0.9
-  swordSound: {fileID: 0}
-  swordVolume: 1
+  swordSound: {fileID: 8300000, guid: f02033129e453a24f96ad94926d58606, type: 3}
+  swordVolume: 0.42
   attackPoint: {fileID: 1070725260}
   enemyLayer:
     serializedVersion: 2
@@ -998,12 +998,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73f186af492f4e14fa96b6ae353462a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAudio
-  footstepSounds: []
-  footstepInterval: 0.4
-  footstepVolume: 0.8
+  footstepSounds:
+  - {fileID: 8300000, guid: af912cd85f5349d4f95662dbbefe0987, type: 3}
+  footstepInterval: 0.5
+  footstepVolume: 0.32
   attackSound: {fileID: 0}
-  attackVolume: 1
-  movementThreshold: 0.02
+  attackVolume: 0
+  movementThreshold: 0.15
 --- !u!1001 &88154908
 PrefabInstance:
   m_ObjectHideFlags: 0
