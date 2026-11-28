@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public enum QuestState
 {
     Available,
@@ -80,7 +80,24 @@ public class QuestManager : MonoBehaviour
         LoadCatalog();
         Load();
     }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
 
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Xóa danh sách NPC của Scene cũ.
+        // NPC trong Scene mới sẽ đăng ký lại trong Start().
+        givers.Clear();
+
+        Debug.Log("Đã làm mới danh sách NPC: " + scene.name);
+    }
     private void LoadCatalog()
     {
         catalog.Clear();
@@ -119,12 +136,22 @@ public class QuestManager : MonoBehaviour
 
         string id = giver.GiverId;
 
-        if (givers.ContainsKey(id) && givers[id] != giver)
+        // Kiểm tra NPC đã đăng ký
+        if (givers.TryGetValue(id, out QuestGiver existing))
         {
-            Debug.LogError("NPC ID bị trùng: " + id);
-            return;
+            // Nếu NPC cũ vẫn tồn tại và không phải NPC hiện tại
+            if (existing != null && existing != giver)
+            {
+                Debug.LogError(
+                    $"NPC ID bị trùng: {id}\n" +
+                    $"NPC cũ: {existing.name}\n" +
+                    $"NPC mới: {giver.name}"
+                );
+                return;
+            }
         }
 
+        // Đăng ký NPC
         givers[id] = giver;
 
         foreach (QuestData q in giver.Quests)
@@ -140,7 +167,7 @@ public class QuestManager : MonoBehaviour
             catalog[q.id] = q;
         }
 
-        // Đợi các NPC trong scene đăng ký xong rồi mới phân phối.
+        // Đợi các NPC đăng ký xong rồi phân phối Quest
         StopAllCoroutines();
         StartCoroutine(RebuildOffersNextFrame());
     }

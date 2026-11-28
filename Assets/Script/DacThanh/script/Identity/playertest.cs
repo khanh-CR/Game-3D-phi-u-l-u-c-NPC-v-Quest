@@ -2,10 +2,26 @@ using System;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterController))]
+
 public class PlayerTest : MonoBehaviour, ISkillable
 {
+    public static PlayerTest Instance;
+
+    private bool isDead = false;
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
     [SerializeField] public CharacterData data;
     [Header("Attitude")] 
     public int atk;
@@ -68,22 +84,54 @@ public class PlayerTest : MonoBehaviour, ISkillable
 
     // Alt cursor control
     private bool isAltPressed = false;
-
+    private bool isInitialized = false;
     private void Start()
     {
+
+        onspawn();
+        // Chỉ khởi tạo chỉ số nếu chưa khởi tạo
+        
+    }
+
+    void onspawn()
+    {
         controller = GetComponent<CharacterController>();
-        tpf = cinemachineCamera.GetComponent<CinemachineThirdPersonFollow>();
         animator = GetComponent<Animator>();
-        skillBook.Init(this);
-        UpdateSkillSlots();
+
+        if (cinemachineCamera != null)
+            tpf = cinemachineCamera.GetComponent<CinemachineThirdPersonFollow>();
+
+        if (skillBook != null)
+        {
+            skillBook.Init(this);
+            UpdateSkillSlots();
+        }
+
         setCam(isFirstPersonPerspective);
         SetCursorState(false);
+        if (!isInitialized)
+        {
+            SetUp();
+            isInitialized = true;
+        }
+    }
+    public void ReturnToScene1()
+    {
+        SceneManager.LoadScene(1);
+        gameObject.transform.position = new Vector3(725.5355f, 2f, 356.08f);
+        onspawn();
         SetUp();
     }
     private void Update()
     {
+        if (currentHp <= 0 && !isDead)
+        {
+            isDead = true;
+            ReturnToScene1();
+            return;
+        }
         HandleCursor();
-
+        
         // Chỉ điều khiển camera khi chuột đang bị khóa
         if (!isAltPressed)
         {

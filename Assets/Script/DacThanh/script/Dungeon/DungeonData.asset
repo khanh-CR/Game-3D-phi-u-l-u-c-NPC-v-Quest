@@ -15,7 +15,7 @@ MonoBehaviour:
   dungeonWorld: 0
   level: 5
   randomSeed: 0
-  seed: 3
+  seed: 5
   maxFloor: 2
   portal: {fileID: 5693000830361015419, guid: 0ea11fee711384f479b5a509a0309a68, type: 3}
   Floors:

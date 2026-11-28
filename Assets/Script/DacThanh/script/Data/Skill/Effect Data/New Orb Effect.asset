@@ -17,7 +17,7 @@ MonoBehaviour:
   radius: 2
   height: 1
   speed: 100
-  damage: 1
+  damage: 3
   damagePerLevel: 1
   targets:
     serializedVersion: 2

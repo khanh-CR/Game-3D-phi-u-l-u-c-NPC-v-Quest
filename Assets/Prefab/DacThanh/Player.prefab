@@ -1228,6 +1228,37 @@ MonoBehaviour:
   iconImage: {fileID: 3111496619752567489}
   cooldownOverlay: {fileID: 3621062052153118013}
   cooldownText: {fileID: 3926940763226044309}
+--- !u!1 &1743057813827047305
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7969904793556963989}
+  m_Layer: 0
+  m_Name: GameObject (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7969904793556963989
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743057813827047305}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.2499993, y: 1.25, z: 1.2499993}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5589004460952595607}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1744897680641979398
 GameObject:
   m_ObjectHideFlags: 0
@@ -1397,7 +1428,7 @@ Transform:
   m_GameObject: {fileID: 1986657778937355689}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.9857071, z: -0, w: 0.16846864}
-  m_LocalPosition: {x: 725.5355, y: 1.346, z: 356.08005}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1408,6 +1439,7 @@ Transform:
   - {fileID: 6417823966335682691}
   - {fileID: 6315939585070897866}
   - {fileID: 7575229425179929387}
+  - {fileID: 7969904793556963989}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -160.602, z: 0}
 --- !u!95 &903892037748191145
@@ -1513,7 +1545,7 @@ MonoBehaviour:
   defPerLevel: 1
   hpPerLevel: 10
   levelEffect: {fileID: 7478731271839673279, guid: 4d3c8045dd8857a4b8d34c2361c61045, type: 3}
-  levelEffectSpawnPosition: {fileID: 8823152547772373174}
+  levelEffectSpawnPosition: {fileID: 7969904793556963989}
   skillBook:
     skills:
     - {fileID: 11400000, guid: 165d4b62300ae8941a896c98f1ad57ec, type: 2}

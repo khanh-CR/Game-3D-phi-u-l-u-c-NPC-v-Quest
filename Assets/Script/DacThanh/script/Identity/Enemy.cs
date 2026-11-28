@@ -157,6 +157,7 @@ public class EnemyAI : MonoBehaviour, ISkillable
     IEnumerator Hit()
     {
         isAttacking = true;
+        attackArea.SetActive(true);
         while (canSeePlayer && IsInAttackRange())
         {
             animator.SetTrigger("attack");

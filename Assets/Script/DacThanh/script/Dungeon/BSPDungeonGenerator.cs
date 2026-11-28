@@ -16,7 +16,7 @@ public class BSPDungeonGenerators
     private int roomPadding;
 
     // Xác suất bỏ các room "thừa" (ngoài Level room bắt buộc)
-    private float EmptyNode = 0.6f;
+    private float EmptyNode = 0.9f;
 
     public List<DungeonRoom> rooms = new List<DungeonRoom>();
 

@@ -7,7 +7,7 @@ public class PlayerAttack : MonoBehaviour
     public Animator animator;
     public int attackDamage = 20;
     public float attackRange = 2f;
-    public float attackCooldown = 0.6f;
+    public float attackCooldown = 0.5f;
 
     [Header("Attack Audio")]
     public AudioClip swordSound;
@@ -62,21 +62,29 @@ public class PlayerAttack : MonoBehaviour
         if (attackPoint == null)
             return;
 
-        Collider[] enemies = Physics.OverlapSphere(
+        // Tìm tất cả Collider trong vùng tấn công
+        Collider[] targets = Physics.OverlapSphere(
             attackPoint.position,
-            attackRange,
-            enemyLayer
+            attackRange
         );
 
         PlayerTest p = GetComponent<PlayerTest>();
         int damage = (p != null) ? p.currentAtk : attackDamage;
 
-        foreach (var e in enemies)
+        foreach (var target in targets)
         {
-            ISkillable enemySkillable = e.GetComponent<ISkillable>();
-            if (enemySkillable == null) continue;
+            // Kiểm tra Tag Enemy
+            if (!target.CompareTag("Enemy"))
+                continue;
+
+            ISkillable enemySkillable = target.GetComponent<ISkillable>();
+
+            if (enemySkillable == null)
+                continue;
 
             enemySkillable.TakeDamage(damage);
+
+            Debug.Log("Đã tấn công Enemy: " + target.name);
         }
     }
 

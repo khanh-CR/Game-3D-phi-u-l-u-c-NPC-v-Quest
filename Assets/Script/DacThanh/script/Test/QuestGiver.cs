@@ -30,7 +30,7 @@ public class QuestGiver : MonoBehaviour
     private void Start()
     {
         qm = QuestManager.Instance;
-
+        
         if (qm == null)
         {
             Debug.LogError("Không tìm thấy QuestManager!");
