@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DungeonData
   m_EditorClassIdentifier: Assembly-CSharp::DungeonData
   dungeonWorld: 0
-  level: 5
+  level: 3
   randomSeed: 0
   seed: 5
   maxFloor: 2

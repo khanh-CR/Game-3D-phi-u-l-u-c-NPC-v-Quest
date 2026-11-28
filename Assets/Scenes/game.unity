@@ -9540,6 +9540,18 @@ PrefabInstance:
       propertyPath: 'skillBook.skills.Array.data[4]'
       value: 
       objectReference: {fileID: 11400000, guid: 165d4b62300ae8941a896c98f1ad57ec, type: 2}
+    - target: {fileID: 519273593688961651, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 519273593688961651, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 3840
+      objectReference: {fileID: 0}
+    - target: {fileID: 519273593688961651, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 2160
+      objectReference: {fileID: 0}
     - target: {fileID: 1986657778937355689, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
       propertyPath: m_Name
       value: Player

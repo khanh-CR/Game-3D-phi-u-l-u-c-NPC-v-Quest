@@ -1,0 +1,12 @@
+{
+    "gold": 0,
+    "quests": [],
+    "offers": [
+        {
+            "npcId": "NPC_01",
+            "questIds": [
+                "0"
+            ]
+        }
+    ]
+}

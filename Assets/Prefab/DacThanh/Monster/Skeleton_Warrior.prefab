@@ -608,7 +608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a45380b695a1c5047b0aeff6112bc138, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  data: {fileID: 11400000, guid: c945bfed399f0dc40bd76d4894497850, type: 2}
+  data: {fileID: 11400000, guid: fd946e8c41c5c8944b713cd61e75310f, type: 2}
   player: {fileID: 0}
   attackArea: {fileID: 4489641010111322868}
   RightHand: {fileID: 2208742304101311312}

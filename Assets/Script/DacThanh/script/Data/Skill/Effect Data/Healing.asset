@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e903c4538857c94eb61248fb170e5c1, type: 3}
   m_Name: Healing
   m_EditorClassIdentifier: Assembly-CSharp::HealEffect
-  healPerTick: 1
-  healPerLevel: 1
-  tickInterval: 3
+  healPerTick: 5
+  healPerLevel: 2
+  tickInterval: 4
   vfxPrefab: {fileID: 9017484664307500583, guid: 982af0383991bdd4a9c05f6532d81a4f, type: 3}
-  vfxLifetime: 2
+  vfxLifetime: 4
