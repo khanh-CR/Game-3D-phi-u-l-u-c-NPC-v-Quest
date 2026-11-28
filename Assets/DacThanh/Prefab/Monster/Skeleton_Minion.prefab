@@ -676,7 +676,7 @@ GameObject:
   - component: {fileID: -4732012743233820877}
   m_Layer: 0
   m_Name: Skeleton_Minion
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -831,6 +831,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   stoppingDistance: 1.5
+  damagePopupPrefab: {fileID: 0}
+  popupHeight: 2.2
 --- !u!1 &3583413177920303106
 GameObject:
   m_ObjectHideFlags: 0

@@ -532,7 +532,7 @@ GameObject:
   - component: {fileID: -4732012743233820877}
   m_Layer: 0
   m_Name: BossSkeleton
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -669,12 +669,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
   data: {fileID: 0}
+  player: {fileID: 0}
+  attackArea: {fileID: 0}
+  RightHand: {fileID: 0}
   atk: 0
   hp: 0
   armor: 0
   currentHp: 0
-  player: {fileID: 0}
   attackRange: 2
+  expReward: 20
   viewDistance: 20
   viewAngle: 360
   eyeHeight: 1.5
@@ -683,6 +686,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   stoppingDistance: 1.5
+  damagePopupPrefab: {fileID: 0}
+  popupHeight: 2.2
 --- !u!1 &3583413177920303106
 GameObject:
   m_ObjectHideFlags: 0
