@@ -155,13 +155,28 @@ public class QuestUIManager : MonoBehaviour
         sb.Clear();
         foreach (QuestData q in qm.ActiveQuests())
         {
-            if (sb.Length > 0) sb.Append("   |   ");   // ngăn cách các quest, không xuống dòng
+            if (sb.Length > 0) sb.Append("   |   ");
 
             QuestState state = qm.GetState(q);
+            int kills = qm.GetKills(q);
+
+            string type = q.type == QuestType.Main
+                ? "<color=#FFD54F>[Chính]</color>"
+                : "<color=#80CBC4>[Phụ]</color>";
+
             if (state == QuestState.Completed)
-                sb.Append($"<b>{q.title}</b>: <color=#7CFC00>Hoàn thành - về gặp NPC nhận thưởng</color>");
+            {
+                sb.Append(
+                    $"<b>{q.title}</b> {type}: " +
+                    $"<color=#7CFC00> hoàn thành: ({kills}/{q.requiredKills}) - về gặp NPC nhận thưởng</color>   |   " +
+                    $"Thưởng: {q.goldReward} Gold");
+            }
             else
-                sb.Append($"{q.title}: {qm.GetKills(q)}/{q.requiredKills}");
+            {
+                sb.Append(
+                    $"<b>{q.title}</b> {type}: {q.description}  {kills}/{q.requiredKills} quái  |   " +
+                    $"Phần thưởng: {q.goldReward} Gold");
+            }
         }
 
         if (trackerText != null)

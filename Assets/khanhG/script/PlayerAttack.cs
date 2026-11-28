@@ -42,6 +42,14 @@ public class PlayerAttack : MonoBehaviour
             attackRange,
             enemyLayer
         );
+        if (enemies != null)
+        {
+            foreach (var e in enemies)
+            {
+                var p = gameObject.GetComponent<PlayerTest>();
+                e.GetComponent<ISkillable>().TakeDamage(p.currentAtk);
+            }
+        }
     }
 
     void OnDrawGizmosSelected()
