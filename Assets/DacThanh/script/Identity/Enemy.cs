@@ -39,7 +39,14 @@ public class EnemyAI : MonoBehaviour, ISkillable
     [SerializeField] private float targetHeight = 1f;
     [SerializeField] private LayerMask obstacleMask;
     [SerializeField] private float stoppingDistance = 2f;
-
+    [Header("Audio")]
+    public AudioClip swordSound;
+    public AudioClip walkSound;
+    public AudioClip hitSound;
+    [Range(0f, 1f)]
+    public float swordVolume = 1f;
+    private AudioSource attackAudioSource;
+    [Header("agent AI")]
     private NavMeshAgent agent;
     private bool canSeePlayer;
     private float actionTime;
@@ -139,6 +146,7 @@ public class EnemyAI : MonoBehaviour, ISkillable
         }
         if (!isAttacking)
         {
+            PlaySwordSound();
             StartCoroutine(Hit());
         }
     }
@@ -182,6 +190,11 @@ public class EnemyAI : MonoBehaviour, ISkillable
         player = dm.player;
         agent = GetComponent<NavMeshAgent>();
         agent.stoppingDistance = stoppingDistance;
+        attackAudioSource = gameObject.AddComponent<AudioSource>();
+        attackAudioSource.playOnAwake = false;
+        attackAudioSource.loop = false;
+        attackAudioSource.volume = 1f;
+        attackAudioSource.spatialBlend = 0f;
         
     }
     private bool CanSeePlayer()
@@ -248,9 +261,18 @@ public class EnemyAI : MonoBehaviour, ISkillable
             right * viewDistance
         );
     }
-
+    void PlaySwordSound()
+    {
+        if (swordSound == null)
+        {
+            Debug.LogError("CHƯA GÁN SWORD SOUND!");
+            return;
+        }
+        attackAudioSource.PlayOneShot(swordSound, swordVolume);
+    }
     public void TakeDamage(int amount)
     {
+        attackAudioSource.PlayOneShot(hitSound, swordVolume);
         if (isdead) return;
         currentHp = Mathf.Max(0, currentHp - amount);
         DamagePopup.Spawn(damagePopupPrefab, transform.position + Vector3.up * popupHeight, amount);
