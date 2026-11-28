@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   atk: 2
-  hp: 15
+  hp: 20
   armor: 0
   skills: []

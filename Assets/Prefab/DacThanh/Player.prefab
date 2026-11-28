@@ -1512,6 +1512,8 @@ MonoBehaviour:
   atkPerLevel: 2
   defPerLevel: 1
   hpPerLevel: 10
+  levelEffect: {fileID: 7478731271839673279, guid: 4d3c8045dd8857a4b8d34c2361c61045, type: 3}
+  levelEffectSpawnPosition: {fileID: 8823152547772373174}
   skillBook:
     skills:
     - {fileID: 11400000, guid: 165d4b62300ae8941a896c98f1ad57ec, type: 2}

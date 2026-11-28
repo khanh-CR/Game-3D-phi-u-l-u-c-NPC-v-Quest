@@ -86,6 +86,8 @@ public class EnemyAI : MonoBehaviour, ISkillable
 
         isdead = true;
         if (player.TryGetComponent(out PlayerTest p)) p.AddExp(expReward);
+        if (QuestManager.Instance != null)
+            QuestManager.Instance.ReportKill();
         StopAllCoroutines();               // dừng Hit() đang bắn trigger attack
         isAttacking = false;
         agent.isStopped = true;

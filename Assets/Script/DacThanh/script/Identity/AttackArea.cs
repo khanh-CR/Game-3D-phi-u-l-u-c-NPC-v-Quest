@@ -11,8 +11,13 @@ public class AttackArea : MonoBehaviour
         if (other.tag == "Player")
         {
             var player = other.GetComponent<PlayerTest>();
-            player.TakeDamage(enemy.atk);
-            wasPlayerDamage = true;
+            ISkillable skillable = other.GetComponent<ISkillable>();
+            if (skillable != null)
+            {
+                player.TakeDamage(enemy.atk);
+                wasPlayerDamage = true;
+            }
+            
         }
     }
 

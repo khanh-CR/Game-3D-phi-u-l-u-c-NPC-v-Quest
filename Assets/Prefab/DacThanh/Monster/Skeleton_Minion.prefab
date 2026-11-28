@@ -1,5 +1,58 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &223628794438766161
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7956296147869666048}
+  - component: {fileID: 7293477736308476266}
+  m_Layer: 7
+  m_Name: AttackArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7956296147869666048
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223628794438766161}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6407882668311736419}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7293477736308476266
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223628794438766161}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5, y: 2, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &308769281548008493
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,7 +62,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3841838486713456014}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: upperarm.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +94,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2853816510890565516}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: lowerleg.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +126,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2593493075855239142}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: foot.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,7 +159,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7006110409394923292}
   - component: {fileID: 515466557901939477}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Minion_Jaw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -220,7 +273,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6206299082828063332}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: handslot.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -239,7 +292,8 @@ Transform:
   m_LocalPosition: {x: 7.1054274e-14, y: 0.096125245, z: -0.057499886}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3298225685463850689}
   m_Father: {fileID: 724951090099027484}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1277600532354521997
@@ -251,7 +305,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6703257358484082574}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wrist.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,7 +337,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1865885825558297858}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: lowerleg.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -315,7 +369,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3677845712022084842}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -347,7 +401,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2377223479149276550}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: toes.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -378,7 +432,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 724951090099027484}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: hand.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -401,6 +455,96 @@ Transform:
   - {fileID: 6206299082828063332}
   m_Father: {fileID: 6703257358484082574}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2192094066308146785
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3298225685463850689}
+  - component: {fileID: 144488146486953979}
+  - component: {fileID: 2733436964221783621}
+  m_Layer: 7
+  m_Name: Skeleton_Axe
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3298225685463850689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2192094066308146785}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.00000009476666, y: 0.70710677, z: 0.7071068, w: -0.00000003612661}
+  m_LocalPosition: {x: 0.018132392, y: 0, z: 0.061739158}
+  m_LocalScale: {x: 100.0001, y: 100.00012, z: 100.00007}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6206299082828063332}
+  m_LocalEulerAnglesHint: {x: 270, y: 0, z: -180}
+--- !u!33 &144488146486953979
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2192094066308146785}
+  m_Mesh: {fileID: -3308595137648721747, guid: 7c6d39e52a8343f46a3b3ecd7a034026, type: 3}
+--- !u!23 &2733436964221783621
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2192094066308146785}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: -8468983757882266563, guid: 7c6d39e52a8343f46a3b3ecd7a034026, type: 3}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 3298225685463850689}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &2644193705267061459
 GameObject:
   m_ObjectHideFlags: 0
@@ -411,7 +555,7 @@ GameObject:
   m_Component:
   - component: {fileID: 869975461434200664}
   - component: {fileID: 1301810707321769883}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Minion_Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -530,8 +674,8 @@ GameObject:
   - component: {fileID: 3944131143819032118}
   - component: {fileID: 5078131125920802507}
   - component: {fileID: -4732012743233820877}
-  m_Layer: 0
-  m_Name: BossSkeleton
+  m_Layer: 7
+  m_Name: Skeleton_Minion
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -547,7 +691,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7363631900748454139}
@@ -560,6 +704,7 @@ Transform:
   - {fileID: 7006110409394923292}
   - {fileID: 7537463892706081652}
   - {fileID: 7946806868215766251}
+  - {fileID: 7956296147869666048}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &7571103535700242694
@@ -594,7 +739,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -668,10 +813,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a45380b695a1c5047b0aeff6112bc138, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  data: {fileID: 0}
+  data: {fileID: 11400000, guid: c945bfed399f0dc40bd76d4894497850, type: 2}
   player: {fileID: 0}
-  attackArea: {fileID: 0}
-  RightHand: {fileID: 0}
+  attackArea: {fileID: 4489641010111322868, guid: 88acc181dbea381469fee5517eb35458, type: 3}
+  RightHand: {fileID: 2208742304101311312, guid: 88acc181dbea381469fee5517eb35458, type: 3}
   atk: 0
   hp: 0
   armor: 0
@@ -686,8 +831,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   stoppingDistance: 1.5
-  damagePopupPrefab: {fileID: 0}
-  popupHeight: 2.2
+  swordSound: {fileID: 8300000, guid: f02033129e453a24f96ad94926d58606, type: 3}
+  walkSound: {fileID: 8300000, guid: af912cd85f5349d4f95662dbbefe0987, type: 3}
+  hitSound: {fileID: 8300000, guid: 18d3104f5ed357f469aae5a74dab9680, type: 3}
+  swordVolume: 1
+  damagePopupPrefab: {fileID: 6017952544176092623, guid: aa4895e817bb372449e558bafae076c2, type: 3}
+  popupHeight: 1.5
 --- !u!1 &3583413177920303106
 GameObject:
   m_ObjectHideFlags: 0
@@ -697,7 +846,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5192008280862315400}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: handslot.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -728,7 +877,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5833048774399382092}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: hips
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -762,7 +911,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 97738340296468888}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: foot.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -794,7 +943,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6224857049780077500}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: toes.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -826,7 +975,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7537463892706081652}
   - component: {fileID: 4499523226368727341}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Minion_LegLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -940,7 +1089,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8079781149478929399}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: hand.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -973,7 +1122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4887488439623713676}
   - component: {fileID: 5805548504113380002}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Minion_ArmRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1087,7 +1236,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4443541211784543075}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: upperleg.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1119,7 +1268,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9087464102440240496}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1151,7 +1300,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7946806868215766251}
   - component: {fileID: 46392021160388023}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Minion_LegRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1265,7 +1414,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4635347961552141873}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: chest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1299,7 +1448,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3595757770303145741}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: lowerarm.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1332,7 +1481,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1902163300797218319}
   - component: {fileID: 8046436475790819704}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Minion_Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1446,7 +1595,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1976276374535282167}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: spine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1479,7 +1628,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2664590306710948544}
   - component: {fileID: 418941539274216916}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Minion_ArmLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1593,7 +1742,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3962627380591602737}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: upperarm.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1625,7 +1774,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 631138518293197584}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: lowerarm.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1657,7 +1806,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1627464097252372276}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: upperleg.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1690,7 +1839,7 @@ GameObject:
   m_Component:
   - component: {fileID: 737601364110271862}
   - component: {fileID: 7672140438224364340}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Minion_Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1804,7 +1953,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7363631900748454139}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Rig_Medium
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1837,7 +1986,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8339463462222658094}
   - component: {fileID: 3034924411961385090}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Minion_Cloak
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1951,7 +2100,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6652257070086195559}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wrist.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}

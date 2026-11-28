@@ -5,7 +5,7 @@ public class PlayerAttack : MonoBehaviour
 {
     [Header("Attack Settings")]
     public Animator animator;
-    public float attackDamage = 20f;
+    public int attackDamage = 20;
     public float attackRange = 2f;
     public float attackCooldown = 0.6f;
 
@@ -54,16 +54,11 @@ public class PlayerAttack : MonoBehaviour
     {
         Debug.Log("ATTACK ĐƯỢC GỌI!");
 
-        // Chạy animation
         if (animator != null)
-        {
             animator.SetTrigger("Attack");
-        }
 
-        // Phát âm thanh kiếm
         PlaySwordSound();
 
-        // Kiểm tra enemy
         if (attackPoint == null)
             return;
 
@@ -72,14 +67,17 @@ public class PlayerAttack : MonoBehaviour
             attackRange,
             enemyLayer
         );
-        // if (enemies != null)
-        // {
-        //     foreach (var e in enemies)
-        //     {
-        //         var p = gameObject.GetComponent<PlayerTest>();
-        //         e.GetComponent<ISkillable>().TakeDamage(p.currentAtk);
-        //     }
-        // }
+
+        PlayerTest p = GetComponent<PlayerTest>();
+        int damage = (p != null) ? p.currentAtk : attackDamage;
+
+        foreach (var e in enemies)
+        {
+            ISkillable enemySkillable = e.GetComponent<ISkillable>();
+            if (enemySkillable == null) continue;
+
+            enemySkillable.TakeDamage(damage);
+        }
     }
 
     void PlaySwordSound()

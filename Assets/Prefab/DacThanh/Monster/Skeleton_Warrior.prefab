@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3891223242273257019}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: foot.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2253075020128913896}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: upperleg.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2363360726712919022}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6961710759440786199}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: foot.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,7 +137,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1086922153117647405}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: upperleg.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3129478792758680494}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: hand.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,7 +202,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2347150360823041321}
   - component: {fileID: 3627650306482464690}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Warrior_ArmRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -317,7 +317,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6243699484122691589}
   - component: {fileID: 1742934069569069485}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Warrior_Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -431,7 +431,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5869888732132555556}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: handslot.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -468,7 +468,7 @@ GameObject:
   - component: {fileID: 969106902417593470}
   - component: {fileID: 5855355577032278245}
   - component: {fileID: 2884770300036554989}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Warrior
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -485,7 +485,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7838960709065961729}
@@ -642,7 +642,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8515808561246169061}
   - component: {fileID: 8627447529791984495}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Warrior_Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -756,7 +756,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 505129714282532241}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: hips
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -791,7 +791,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4910683368693414857}
   - component: {fileID: 194727971356662256}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Warrior_LegRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -906,7 +906,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4680745783920472388}
   - component: {fileID: 9065183892130100942}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Warrior_Cloak
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1020,7 +1020,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7838960709065961729}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Rig_Medium
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1052,7 +1052,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 148480045353019018}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1084,7 +1084,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5382231881829839526}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: lowerarm.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1116,7 +1116,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 483963859628451310}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wrist.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1148,7 +1148,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1707172498929795112}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: lowerarm.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1181,7 +1181,7 @@ GameObject:
   m_Component:
   - component: {fileID: 881584054656139342}
   - component: {fileID: 6967785115242920038}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: AttackArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1233,7 +1233,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 23017804157665020}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: wrist.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1265,7 +1265,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1841357709870279209}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: toes.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1296,7 +1296,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2351565209684418430}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: upperarm.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1328,7 +1328,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3910932546000558046}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: hand.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1360,7 +1360,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8679426016204841954}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: toes.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1391,7 +1391,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4418646779072952798}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: lowerleg.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1423,7 +1423,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4446168238295628706}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: upperarm.r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1456,7 +1456,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2789616993643569162}
   - component: {fileID: 84623876919630269}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Warrior_LegLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1571,7 +1571,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4654166407240528691}
   - component: {fileID: 3492740891510057243}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Warrior_ArmLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1685,7 +1685,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6146937916688818890}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: spine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1718,7 +1718,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3328999158464650330}
   - component: {fileID: 6219736915545790596}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Warrior_Jaw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1832,7 +1832,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3421252773305956271}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: handslot.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1864,7 +1864,7 @@ GameObject:
   m_Component:
   - component: {fileID: 296045318256668768}
   - component: {fileID: 2644456776716701608}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Warrior_Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1980,7 +1980,7 @@ GameObject:
   - component: {fileID: 8253067241495069760}
   - component: {fileID: 5358645332900401465}
   - component: {fileID: 5489361756043257007}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Warrior_Helmet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2070,7 +2070,7 @@ GameObject:
   - component: {fileID: 8534084184782370491}
   - component: {fileID: 4738054869707159838}
   - component: {fileID: 7360012660595002836}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Axe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2158,7 +2158,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 791213872401357387}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: lowerleg.l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2190,7 +2190,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6206873543093980454}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: chest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2223,9 +2223,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4606433849397494319}
     m_Modifications:
+    - target: {fileID: 79397032406204418, guid: ce3bedf90bdd3ba4a93f058705663296, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 354720067079468948, guid: ce3bedf90bdd3ba4a93f058705663296, type: 3}
       propertyPath: m_Name
       value: HP Bar Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 354720067079468948, guid: ce3bedf90bdd3ba4a93f058705663296, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2108980058182869723, guid: ce3bedf90bdd3ba4a93f058705663296, type: 3}
       propertyPath: m_Pivot.x
@@ -2331,6 +2339,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3734845503791299321, guid: ce3bedf90bdd3ba4a93f058705663296, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5526190429078015710, guid: ce3bedf90bdd3ba4a93f058705663296, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7032139794658429481, guid: ce3bedf90bdd3ba4a93f058705663296, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -2347,6 +2363,10 @@ PrefabInstance:
       propertyPath: fill
       value: 
       objectReference: {fileID: 151898859601837054}
+    - target: {fileID: 9105016220793278377, guid: ce3bedf90bdd3ba4a93f058705663296, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

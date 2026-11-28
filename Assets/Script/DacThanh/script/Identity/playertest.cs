@@ -33,8 +33,10 @@ public class PlayerTest : MonoBehaviour, ISkillable
     public int exp;
     public int baseExp = 100;          
     public float expGrowth = 1.2f;     
-    public int levelsPerSlot = 5;      
+    public int levelsPerSlot = 1;      
     public int atkPerLevel = 2, defPerLevel = 1, hpPerLevel = 10;
+    public GameObject levelEffect;
+    public Transform levelEffectSpawnPosition;
     public int ExpToNext => Mathf.Max(1, Mathf.RoundToInt(baseExp * Mathf.Pow(expGrowth, level - 1)));
     [Header("Skills")]
     public SkillBook skillBook;
@@ -283,15 +285,38 @@ public class PlayerTest : MonoBehaviour, ISkillable
 
         exp += amount;
         int ups = 0;
-        while (level < maxLevel && exp >= ExpToNext) { exp -= ExpToNext; level++; ups++; }
-        if (level >= maxLevel) exp = 0;      // đạt cấp tối đa thì không tích exp nữa
+        while (level < maxLevel && exp >= ExpToNext)
+        {
+            exp -= ExpToNext;
+            level++;
+            ups++;
+        }
+
+        if (level >= maxLevel) exp = 0;
         if (ups == 0) return;
 
-        atk += atkPerLevel * ups;  currentAtk += atkPerLevel * ups;
-        armor += defPerLevel * ups;  currentArmor += defPerLevel * ups;
-        hp  += hpPerLevel * ups;   currentHp  += hpPerLevel * ups;
+        atk += atkPerLevel * ups;
+        currentAtk += atkPerLevel * ups;
+        armor += defPerLevel * ups;
+        currentArmor += defPerLevel * ups;
+        hp += hpPerLevel * ups;
+        currentHp += hpPerLevel * ups;
 
-        UpdateSkillSlots();                  // lên level chỉ tăng stats và mở khóa slot
+        UpdateSkillSlots();
+        
+        // Spawn hiệu ứng lên cấp
+        if (levelEffect != null)
+        {
+            Transform parent = levelEffectSpawnPosition != null
+                ? levelEffectSpawnPosition
+                : transform;
+
+            GameObject fx = Instantiate(levelEffect, parent);
+            fx.transform.localPosition = Vector3.zero;
+            fx.transform.localRotation = Quaternion.identity;
+
+            Destroy(fx, 2f);
+        }
     }
     private void UpdateSkillSlots() => skillBook.SetUnlocked(1 + level / Mathf.Max(1, levelsPerSlot));
 

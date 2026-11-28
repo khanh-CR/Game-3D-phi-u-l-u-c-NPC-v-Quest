@@ -6,6 +6,7 @@ public enum QuestType { Main, Side }
 [CreateAssetMenu(menuName = "Quest/Quest Data")]
 public class QuestData : ScriptableObject
 {
+    
     public string id;                        // duy nhất, dùng để lưu save (tự lấy tên asset nếu để trống)
     public string title = "Dọn dẹp Dungeon";
     [TextArea(2, 5)] public string description = "Hãy vào Dungeon và tiêu diệt quái vật.";

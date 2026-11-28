@@ -3,8 +3,8 @@
     "quests": [
         {
             "id": "0",
-            "state": 1,
-            "kills": 0
+            "state": 3,
+            "kills": 10
         }
     ],
     "offers": [

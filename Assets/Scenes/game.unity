@@ -1194,10 +1194,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc70852e92c5b0f4ca0c63e5e911e5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorSceneTransition
-  sceneName: DarkThanhMap
-  interactUI: {fileID: 127264154}
-  fadeCanvas: {fileID: 910458671}
-  fadeDuration: 1
+  target: {fileID: 81796246}
+  data: {fileID: 11400000, guid: ee0f3e048b0c2c145823cc6f1a9cd381, type: 2}
+  sceneIndex: 2
+  yOffset: 2
+  isTrigger: 0
 --- !u!4 &117341753 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4721780193091316, guid: efdb3ed10ba9c6b418a492aa30ba0edd, type: 3}
@@ -9540,6 +9541,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: 'skillBook.skills.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 165d4b62300ae8941a896c98f1ad57ec, type: 2}
+    - target: {fileID: 42484805886571858, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: 'skillBook.skills.Array.data[4]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 165d4b62300ae8941a896c98f1ad57ec, type: 2}
     - target: {fileID: 1986657778937355689, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
       propertyPath: m_Name
       value: Player

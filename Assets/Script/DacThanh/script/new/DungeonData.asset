@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DungeonData
   m_EditorClassIdentifier: Assembly-CSharp::DungeonData
   dungeonWorld: 0
-  level: 3
+  level: 5
   randomSeed: 0
   seed: 3
   maxFloor: 2
@@ -53,9 +53,9 @@ MonoBehaviour:
     Rate: 12
   roof: {fileID: 0}
   monster:
-  - prefab: {fileID: 2476040182585028684, guid: 88acc181dbea381469fee5517eb35458, type: 3}
+  - prefab: {fileID: 2664531143061349541, guid: b1ec1f0007d7e044db27fb8ea89a38f9, type: 3}
     Rate: 1
-  Boss: {fileID: 2664531143061349541, guid: eb6cf6d7bf37a7d479020038a1601fb7, type: 3}
+  Boss: {fileID: 2476040182585028684, guid: 88acc181dbea381469fee5517eb35458, type: 3}
   others:
   - prefab: {fileID: 5200053343832838858, guid: 8fb406151949de54fbb2371b52f9cde6, type: 3}
     Rate: 2
