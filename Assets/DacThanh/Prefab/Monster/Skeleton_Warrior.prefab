@@ -627,7 +627,7 @@ MonoBehaviour:
     m_Bits: 0
   stoppingDistance: 1.5
   damagePopupPrefab: {fileID: 6017952544176092623, guid: aa4895e817bb372449e558bafae076c2, type: 3}
-  popupHeight: 2.2
+  popupHeight: 1.5
 --- !u!1 &2687462181157298209
 GameObject:
   m_ObjectHideFlags: 0
@@ -2339,11 +2339,26 @@ PrefabInstance:
       propertyPath: m_Value
       value: 0.077
       objectReference: {fileID: 0}
+    - target: {fileID: 7632267018356897327, guid: ce3bedf90bdd3ba4a93f058705663296, type: 3}
+      propertyPath: fill
+      value: 
+      objectReference: {fileID: 151898859601837054}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce3bedf90bdd3ba4a93f058705663296, type: 3}
+--- !u!114 &151898859601837054 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7371152978522964816, guid: ce3bedf90bdd3ba4a93f058705663296, type: 3}
+  m_PrefabInstance: {fileID: 7228347363553065134}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!224 &8724780421720136309 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2108980058182869723, guid: ce3bedf90bdd3ba4a93f058705663296, type: 3}
