@@ -10410,6 +10410,14 @@ PrefabInstance:
       propertyPath: baseExp
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 1675563610115979709, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_fontSize
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 1675563610115979709, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 1986657778937355689, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
       propertyPath: m_Name
       value: Player
@@ -10420,7 +10428,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2698534988037428388, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3338535331714407121, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
       propertyPath: m_AnchorMax.y
@@ -10549,6 +10557,10 @@ PrefabInstance:
     - target: {fileID: 5780220539667868171, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
       propertyPath: m_Color.a
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6861264017111171863, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -709
       objectReference: {fileID: 0}
     - target: {fileID: 6878487812779411047, guid: e2b0e76e1247bf940aaaa58138c7635f, type: 3}
       propertyPath: m_AnchorMax.y
