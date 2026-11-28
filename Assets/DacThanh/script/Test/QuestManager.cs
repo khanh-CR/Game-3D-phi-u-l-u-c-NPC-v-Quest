@@ -64,7 +64,7 @@ public class QuestManager : MonoBehaviour
     private string pendingMessage;
 
     private string SavePath =>
-        Path.Combine(Application.persistentDataPath, "quests.json");
+        Path.Combine(Application.dataPath, "Resources", "Quests", "quests.json");
 
     private void Awake()
     {
@@ -501,6 +501,10 @@ private void RebuildOffers()
 
         try
         {
+            string dir = Path.GetDirectoryName(SavePath);
+            if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
             File.WriteAllText(
                 SavePath,
                 JsonUtility.ToJson(data, true));
